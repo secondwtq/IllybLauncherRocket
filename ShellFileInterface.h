@@ -38,10 +38,7 @@
 
 class ShellFileInterface : public Rocket::Core::FileInterface {
 public:
-	ShellFileInterface();
-	virtual ~ShellFileInterface();
-
-	/// Opens a file.		
+	/// Opens a file.
 	virtual Rocket::Core::FileHandle Open(const Rocket::Core::String& path);
 
 	/// Closes a previously opened file.		

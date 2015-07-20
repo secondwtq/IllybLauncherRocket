@@ -10,6 +10,7 @@
 #include "ShellRenderInterfaceExtensions.h"
 #include "ShellSystemInterface.h"
 #include "ShellFileInterface.h"
+#include "RocketEventInstancer.hxx"
 
 ShellRenderInterfaceExtensions *shell_renderer_ext = nullptr;
 Rocket::Core::Context *rocket_ctx = nullptr;
@@ -21,6 +22,12 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
     if (action == GLFW_PRESS) {
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, GL_TRUE);
+    }
+
+    if (action == GLFW_PRESS) {
+//        rocket_ctx->ProcessKeyDown();
+    } else if (action == GLFW_RELEASE) {
+
     }
 }
 
@@ -87,6 +94,8 @@ int main() {
     };
     for (int i = 0; i < sizeof(font_names) / sizeof(Rocket::Core::String); i++) {
         Rocket::Core::FontDatabase::LoadFontFace(font_names[i]); }
+
+    Rocket::Core::Factory::RegisterEventListenerInstancer(new RocketEventInstancer());
 
     Rocket::Core::ElementDocument *document = rocket_ctx->LoadDocument("main.rml");
     assert(document);
