@@ -14,6 +14,8 @@
 
 #include "FacerEvent.hxx"
 
+#include "config.hxx"
+
 ShellRenderInterfaceExtensions *shell_renderer_ext = nullptr;
 Rocket::Core::Context *rocket_ctx = nullptr;
 
@@ -54,11 +56,10 @@ int main() {
 
     assert(glfwInit());
     glfwSetErrorCallback(error_callback);
-    GLFWwindow *window = glfwCreateWindow(800, 600, "IllybLauncher", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(LauncherConfig::instance().width,
+          LauncherConfig::instance().height, "IllybLauncher", nullptr, nullptr);
     if (!window) {
-        glfwTerminate();
-        exit(-1);
-    }
+        glfwTerminate(); exit(-1); }
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, glfw_cursorcb);
     glfwSetMouseButtonCallback(window, glfw_mousecb);
@@ -75,10 +76,10 @@ int main() {
     Rocket::Core::Initialise();
     Rocket::Controls::Initialise();
 
-    rocket_ctx = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(800, 600));
+    rocket_ctx = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(
+            LauncherConfig::instance().width, LauncherConfig::instance().height));
     assert(rocket_ctx);
     Rocket::Debugger::Initialise(rocket_ctx);
-//    shell_renderer_ext->SetContext(rocket_ctx);
 
     Rocket::Core::String font_names[4] = {
         "Delicious-Roman.otf", "Delicious-Italic.otf",
@@ -101,20 +102,15 @@ int main() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, 800, 600, 0, -1, 1);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
     glViewport(0, 0, 1600, 1200);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, 800, 600, 0, -1, 1);
+    glOrtho(0, LauncherConfig::instance().width,
+            LauncherConfig::instance().height, 0, -1, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    rocket_ctx->SetDimensions(Rocket::Core::Vector2i(800, 600));
+//    rocket_ctx->SetDimensions(Rocket::Core::Vector2i(
+//            LauncherConfig::instance().width, LauncherConfig::instance().height));
 
     while (!glfwWindowShouldClose(window)) {
         main_loop();
@@ -125,9 +121,7 @@ int main() {
 
     rocket_ctx->RemoveReference();
     Rocket::Core::Shutdown();
-
     glfwDestroyWindow(window);
     glfwTerminate();
-
     return 0;
 }
