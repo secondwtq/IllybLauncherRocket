@@ -12,6 +12,8 @@
 #include "ShellFileInterface.h"
 #include "RocketEventInstancer.hxx"
 
+#include "FacerEvent.hxx"
+
 ShellRenderInterfaceExtensions *shell_renderer_ext = nullptr;
 Rocket::Core::Context *rocket_ctx = nullptr;
 
@@ -32,23 +34,13 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 }
 
 void glfw_cursorcb(GLFWwindow *window, double x, double y) {
-    rocket_ctx->ProcessMouseMove(x, y, 0); }
+    Facer::InputEvent e = Facer::Middlewares::GLFW::createEventMouseMove(window, x, y);
+    Facer::Middlewares::Rocket::processEvent(rocket_ctx, e);
+}
 
 void glfw_mousecb(GLFWwindow *window, int button, int action, int mods) {
-    int button_rocket = 0;
-    switch (button) {
-        case GLFW_MOUSE_BUTTON_LEFT:
-            button_rocket = 0; break;
-        case GLFW_MOUSE_BUTTON_RIGHT:
-            button_rocket = 1; break;
-        case GLFW_MOUSE_BUTTON_MIDDLE:
-            button_rocket = 2; break;
-    }
-    if (action == GLFW_PRESS) {
-        rocket_ctx->ProcessMouseButtonDown(button_rocket, 0);
-    } else if (action == GLFW_RELEASE) {
-        rocket_ctx->ProcessMouseButtonUp(button_rocket, 0);
-    }
+    Facer::InputEvent e = Facer::Middlewares::GLFW::createEventMouseButton(window, button, action, mods);
+    Facer::Middlewares::Rocket::processEvent(rocket_ctx, e);
 }
 
 void main_loop() {
