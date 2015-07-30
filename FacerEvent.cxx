@@ -60,8 +60,7 @@ InputEvent::ModifierState generateModifierState(GLFWwindow *window) {
 
 InputEvent createEventMouseMove(GLFWwindow *window, int x, int y) {
     InputEvent ret = createEvent(InputEvent::MouseMove);
-    ret.cursorPosition[0] = static_cast<unsigned short>(x);
-    ret.cursorPosition[1] = static_cast<unsigned short>(y);
+    ret.setCursorPosition(x, y);
     ret.modifierState = generateModifierState(window);
     return ret;
 }
@@ -76,8 +75,7 @@ InputEvent createEventMouseButton(GLFWwindow *window, int button, int action, in
 
     double xpos = 0, ypos = 0;
     glfwGetCursorPos(window, &xpos, &ypos);
-    ret.cursorPosition[0] = static_cast<unsigned short>(xpos);
-    ret.cursorPosition[1] = static_cast<unsigned short>(ypos);
+    ret.setCursorPosition(xpos, ypos);
     ret.modifierState = generateModifierState(mods);
 
     switch (button) {
@@ -93,6 +91,16 @@ InputEvent createEventMouseButton(GLFWwindow *window, int button, int action, in
         default:
             break;
     }
+
+    return ret;
+}
+
+InputEvent createEventMouseWheel(GLFWwindow *window, double xoffset, double yoffset) {
+    InputEvent ret = createEvent(InputEvent::MouseWheel);
+    double xpos = 0, ypos = 0;
+    glfwGetCursorPos(window, &xpos, &ypos);
+    ret.setCursorPosition(xpos, ypos);
+    ret.modifierState = generateModifierState(window);
 
     return ret;
 }
@@ -145,6 +153,10 @@ void processEvent(::Rocket::Core::Context *ctx, const InputEvent& event) {
             break;
         case InputEvent::MouseRelease:
             ctx->ProcessMouseButtonUp(getMouseButtonIdentifier(event.primaryButton), generateModifierState(event));
+            break;
+
+        case InputEvent::MouseWheel:
+            ctx->ProcessMouseWheel(10, generateModifierState(event));
             break;
 
         default:

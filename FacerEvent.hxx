@@ -57,6 +57,13 @@ public:
     MouseButtonState buttonState;
     ModifierState modifierState;
     long long timestamp = 0;
+
+    template <typename T>
+    InputEvent& setCursorPosition(T xpos, T ypos) {
+        this->cursorPosition[0] = static_cast<unsigned short>(xpos);
+        this->cursorPosition[1] = static_cast<unsigned short>(ypos);
+        return *this;
+    }
 };
 }
 
@@ -76,6 +83,7 @@ namespace GLFW {
 
 InputEvent createEventMouseMove(GLFWwindow *window, int x, int y);
 InputEvent createEventMouseButton(GLFWwindow *window, int button, int action, int mods);
+InputEvent createEventMouseWheel(GLFWwindow *window, double xoffset, double yoffset);
 
 InputEvent::ModifierState generateModifierState(int mods);
 InputEvent::ModifierState generateModifierState(GLFWwindow *window);

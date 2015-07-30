@@ -1,0 +1,69 @@
+<rml>
+<head>
+
+<link type="text/rcss" href="main.rcss" />
+<link type="text/template" href="settingt.rml" />
+
+<script>
+function launch()
+	print('event triggered')
+end
+</script>
+
+</head>
+<body>
+
+	<div class="background-element">hhhhh</div>
+
+	<h1>EASB Hour 丧命时刻</h1>
+
+	<div class="owner-setting player">
+		<input class="select-enabled" type="checkbox" checked disabled />
+		<input value="Translator-C" style="width: 10em;"></input>
+		<select class="select-side" name="owner-side" style="width: 10em;">
+			<option value="Random"><img class="img-flag" src="random.tga" />Random</option>
+			<option value="United States" selected><img class="img-flag" src="us.tga" />United States</option>
+			<option value="China"><img class="img-flag" src="china.tga" />China</option>
+			<option value="Russia"><img class="img-flag" src="russia.tga" />Russia</option>
+		</select>
+		<select name="owner-place" style="width: 4em;">
+			<option value="-"></option>
+			<option value="1"></option>
+			<option value="2"></option>
+		</select>
+		<select name="owner-ally" style="width: 4em;" id="owner-ally-0">
+			<option value="-"></option>
+			<option value="A"></option>
+		</select>
+	</div>
+
+	<div id="player-1">
+		<template src="owner-setting-template"></template>
+	</div>
+	<div id="player-2">
+		<template src="owner-setting-template"></template>
+	</div>
+	<div id="player-3">
+		<template src="owner-setting-template"></template>
+	</div>
+	<div id="player-4">
+		<template src="owner-setting-template"></template>
+	</div>
+	<div id="player-5">
+		<template src="owner-setting-template"></template>
+	</div>
+	<div id="player-6">
+		<template src="owner-setting-template"></template>
+	</div>
+	<div id="player-7">
+		<template src="owner-setting-template"></template>
+	</div>
+
+	<div style="text-align: center; padding: 1em;">
+		<button onclick="launch(document);" id="launch-btn">Launch</button>
+	</div>
+
+	<img src="alpha2.tga" />
+
+</body>
+</rml>

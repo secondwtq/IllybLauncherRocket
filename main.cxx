@@ -1,16 +1,19 @@
 
+#include <stdio.h>
 #include <GLFW/glfw3.h>
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 #include <Rocket/Debugger.h>
 #include <assert.h>
-#include <stdio.h>
+#include <luajit-2.0/lua.hpp>
 
 #include "ShellRenderInterfaceOpenGL.h"
-#include "ShellRenderInterfaceExtensions.h"
 #include "ShellSystemInterface.h"
 #include "ShellFileInterface.h"
 #include "RocketEventInstancer.hxx"
+
+#include <Rocket/Core/Lua/Interpreter.h>
+#include <Rocket/Controls/Lua/Controls.h>
 
 #include "FacerEvent.hxx"
 
@@ -45,6 +48,11 @@ void glfw_mousecb(GLFWwindow *window, int button, int action, int mods) {
     Facer::Middlewares::Rocket::processEvent(rocket_ctx, e);
 }
 
+void glfw_wheelcb(GLFWwindow *window, double xoffset, double yoffset) {
+    Facer::InputEvent e = Facer::Middlewares::GLFW::createEventMouseWheel(window, xoffset, yoffset);
+    Facer::Middlewares::Rocket::processEvent(rocket_ctx, e);
+}
+
 void main_loop() {
     rocket_ctx->Update();
 
@@ -63,6 +71,7 @@ int main() {
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, glfw_cursorcb);
     glfwSetMouseButtonCallback(window, glfw_mousecb);
+    glfwSetScrollCallback(window, glfw_wheelcb);
     glfwMakeContextCurrent(window);
 
     ShellRenderInterfaceOpenGL gl_renderer;
@@ -73,27 +82,24 @@ int main() {
     Rocket::Core::SetSystemInterface(&sys_interface);
     ShellFileInterface file_interface;
     Rocket::Core::SetFileInterface(&file_interface);
+
     Rocket::Core::Initialise();
     Rocket::Controls::Initialise();
+    Rocket::Core::Lua::Interpreter::Initialise();
+    Rocket::Controls::Lua::RegisterTypes(Rocket::Core::Lua::Interpreter::GetLuaState());
 
     rocket_ctx = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(
             LauncherConfig::instance().width, LauncherConfig::instance().height));
     assert(rocket_ctx);
     Rocket::Debugger::Initialise(rocket_ctx);
 
-    Rocket::Core::String font_names[4] = {
-        "Delicious-Roman.otf", "Delicious-Italic.otf",
-        "Delicious-Bold.otf", "Delicious-BoldItalic.otf",
-    };
-    for (int i = 0; i < sizeof(font_names) / sizeof(Rocket::Core::String); i++) {
-        Rocket::Core::FontDatabase::LoadFontFace(font_names[i]); }
+    // Rocket::Core::Factory::RegisterEventListenerInstancer(new RocketEventInstancer());
 
-    Rocket::Core::Factory::RegisterEventListenerInstancer(new RocketEventInstancer());
-
-    Rocket::Core::ElementDocument *document = rocket_ctx->LoadDocument("main.rml");
-    assert(document);
-    document->Show();
-    document->RemoveReference();
+    Rocket::Core::Lua::Interpreter::LoadFile(Rocket::Core::String("main_script.lua"));
+//    Rocket::Core::ElementDocument *document = rocket_ctx->LoadDocument("main.rml");
+//    assert(document);
+//    document->Show();
+//    document->RemoveReference();
 
     glClearColor(0, 0, 0, 1);
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -109,8 +115,6 @@ int main() {
             LauncherConfig::instance().height, 0, -1, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-//    rocket_ctx->SetDimensions(Rocket::Core::Vector2i(
-//            LauncherConfig::instance().width, LauncherConfig::instance().height));
 
     while (!glfwWindowShouldClose(window)) {
         main_loop();
@@ -120,6 +124,7 @@ int main() {
     }
 
     rocket_ctx->RemoveReference();
+    Rocket::Core::Lua::Interpreter::Shutdown();
     Rocket::Core::Shutdown();
     glfwDestroyWindow(window);
     glfwTerminate();
