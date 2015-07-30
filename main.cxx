@@ -15,6 +15,7 @@
 #include <Rocket/Core/Lua/Interpreter.h>
 #include <Rocket/Controls/Lua/Controls.h>
 
+#include "INIBinding.hxx"
 #include "FacerEvent.hxx"
 
 #include "config.hxx"
@@ -87,6 +88,7 @@ int main() {
     Rocket::Controls::Initialise();
     Rocket::Core::Lua::Interpreter::Initialise();
     Rocket::Controls::Lua::RegisterTypes(Rocket::Core::Lua::Interpreter::GetLuaState());
+    registerInterfaceINI(Rocket::Core::Lua::Interpreter::GetLuaState());
 
     rocket_ctx = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(
             LauncherConfig::instance().width, LauncherConfig::instance().height));
@@ -96,10 +98,6 @@ int main() {
     // Rocket::Core::Factory::RegisterEventListenerInstancer(new RocketEventInstancer());
 
     Rocket::Core::Lua::Interpreter::LoadFile(Rocket::Core::String("main_script.lua"));
-//    Rocket::Core::ElementDocument *document = rocket_ctx->LoadDocument("main.rml");
-//    assert(document);
-//    document->Show();
-//    document->RemoveReference();
 
     glClearColor(0, 0, 0, 1);
     glEnableClientState(GL_VERTEX_ARRAY);

@@ -29,7 +29,9 @@ global_data = {
 
 	player = {
 
-	}
+	},
+
+	datasources = { }
 }
 
 for i = 1, 7 do
@@ -39,11 +41,12 @@ for i = 1, 7 do
 		side = 'Random',
 		color = '-',
 		place = '-',
-		ally = '-'
+		ally = '-',
+
+		cache_place = nil,
+		cache_color = nil
 	}
 end
-
-datasources = { }
 
 local srclocation = DataSource.new("srclocation")
 srclocation.GetNumRows = function (table_name)
@@ -81,7 +84,7 @@ srclocation.GetRow = function (table_name, row_index, columns)
 		end
 	end
 end
-datasources.location = srclocation
+global_data.datasources.location = srclocation
 
 local srccolor = DataSource.new("srccolor")
 srccolor.GetNumRows = function (table_name)
@@ -119,7 +122,7 @@ srccolor.GetRow = function (table_name, row_index, columns)
 		end
 	end
 end
-datasources.color = srccolor
+global_data.datasources.color = srccolor
 
 function setenable_aiplayer(id, enabled)
 	id = tonumber(id)
@@ -154,7 +157,7 @@ function select_place(event)
 		check_remaining_place()
 
 		for i = 1, 7 do
-			datasources.location:NotifyRowChange('place' .. i)
+			global_data.datasources.location:NotifyRowChange('place' .. i)
 		end
 	end
 end
@@ -187,7 +190,7 @@ function select_color(event)
 		global_data.player[id].color = event.parameters.value
 		check_remaining_color()
 		for i = 1, 7 do
-			datasources.color:NotifyRowChange('color' .. i)
+			global_data.datasources.color:NotifyRowChange('color' .. i)
 		end
 		update_colors_style()
 	end
