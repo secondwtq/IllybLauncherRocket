@@ -19,7 +19,7 @@
 			</select>
 			<dataselect class="select-color" name="owner-color" style="width: 4em;" source="srccolor.placeholder" fields="colors" onchange="select_color(event)"></dataselect>
 			<dataselect class="select-place" name="owner-place" style="width: 4em;" source="srclocation.placeholder" fields="places" onchange="select_place(event)"></dataselect>
-			<select name="owner-ally" style="width: 4em;" onchange="select_ally(event)">
+			<select class="select-ally" name="owner-ally" style="width: 4em;" onchange="select_ally(event)">
 				<option value="-" selected>-</option>
 				<option value="A">A</option>
 				<option value="B">B</option>

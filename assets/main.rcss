@@ -153,3 +153,26 @@ input.text:disabled {
 	border-color: rgb(0, 0, 255);
 	background: rgb(0, 0, 255);
 }
+
+input.range {
+	background: rgb(0, 255, 0);
+	width: 8em;
+	height: 1em;
+}
+
+input.range slidertrack {
+	background: black;
+}
+
+input.range sliderbar {
+	background: rgb(255, 0, 0);
+	width: 0.5em;
+}
+
+input.range sliderarrowinc {
+	background: rgb(0, 0, 255);
+}
+
+input.range sliderarrowdec {
+	background: rgb(0, 0, 255);
+}

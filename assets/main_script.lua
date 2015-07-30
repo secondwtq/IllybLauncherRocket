@@ -1,4 +1,6 @@
 
+dofile('iniformatter.lua')
+
 function load_font()
 
 	-- rocket:LoadFontFace('Delicious-Roman.otf')
@@ -18,11 +20,16 @@ document = maincontext:LoadDocument("main.rml")
 document:Show()
 
 global_data = {
-	num_aiplayers = 6,
+	num_players = 6,
 	colors = {
 		'rgb(255, 0, 0)',
 		'rgb(0, 255, 0)',
 		'rgb(0, 0, 255)',
+		'rgb(255, 255, 0)',
+		'rgb(0, 255, 255)',
+		'rgb(255, 0, 255)',
+		'rgb(255, 255, 255)',
+		'rgb(0, 0, 0)'
 	},
 	remaining_place = { 1, 2, 3, 4, 5, 6, 7 },
 	remaining_color = { 1, 2, 3 },
@@ -34,7 +41,7 @@ global_data = {
 	datasources = { }
 }
 
-for i = 1, 7 do
+for i = 1, 8 do
 	global_data.player[i] = {
 		enabled = false,
 		name = 'easy',
@@ -50,7 +57,7 @@ end
 
 local srclocation = DataSource.new("srclocation")
 srclocation.GetNumRows = function (table_name)
-	if table_name == 'placeholder' then return global_data.num_aiplayers + 1 end
+	if table_name == 'placeholder' then return global_data.num_players + 1 end
 	if table_name:sub(1, 5) == 'place' then
 		local player_id = tonumber(table_name:sub(6, 6))
 		if global_data.player[player_id].place ~= '-' then
@@ -156,9 +163,8 @@ function select_place(event)
 		global_data.player[id].place = event.parameters.value
 		check_remaining_place()
 
-		for i = 1, 7 do
-			global_data.datasources.location:NotifyRowChange('place' .. i)
-		end
+		for i = 1, 8 do
+			global_data.datasources.location:NotifyRowChange('place' .. i) end
 	end
 end
 
@@ -189,20 +195,37 @@ function select_color(event)
 	if global_data.player[id].color ~= event.parameters.value then
 		global_data.player[id].color = event.parameters.value
 		check_remaining_color()
-		for i = 1, 7 do
-			global_data.datasources.color:NotifyRowChange('color' .. i)
-		end
+		for i = 1, 8 do
+			global_data.datasources.color:NotifyRowChange('color' .. i) end
 		update_colors_style()
 	end
 end
 
-function update_numaiplayers(num)
-	global_data.num_aiplayers = num
-	for i = 1, 7 do
+function update_rangevalue(range_element)
+	local value = Element.As.ElementFormControlInput(range_element).value
+	local data_element = value.parent_node.GetElementsByClassName('range-data')[0]
+	data_element.inner_rml = tostring(value)
+end
+
+function select_speed(event)
+
+end
+
+function select_credit(event)
+
+end
+
+function select_unitcount(event)
+
+end
+
+function update_numplayers(num)
+	global_data.num_players = num
+	for i = 1, 8 do
 		local selector = document:GetElementById('player-' .. i)
 		Element.As.ElementFormControlInput(selector:GetElementsByClassName('checkbox')[0]).checked = true
 	end
-	for i = num+1, 7 do
+	for i = num+1, 8 do
 		local selector = document:GetElementById('player-' .. i)
 		Element.As.ElementFormControlInput(selector:GetElementsByClassName('checkbox')[0]).checked = false
 	end
@@ -229,19 +252,19 @@ end
 
 function check_remaining_place()
 	local r = { }
-	for i = 1, global_data.num_aiplayers+1 do
+	for i = 1, global_data.num_players+1 do
 		r[i] = true
 	end
-	for i = 1, 7 do
+	for i = 1, 8 do
 		global_data.player[i].cache_place = nil end
-	for i = 1, global_data.num_aiplayers do
+	for i = 1, global_data.num_players do
 		if global_data.player[i].place ~= '-' then
 			r[tonumber(global_data.player[i].place)] = false
 		end
 	end
 
 	local ret = { }
-	for i = 1, global_data.num_aiplayers+1 do
+	for i = 1, global_data.num_players+1 do
 		if r[i] then
 			table.insert(ret, tostring(i))
 		end
@@ -255,7 +278,7 @@ function check_remaining_color()
 
 	for i = 1, #global_data.colors do
 		r[i] = true end
-	for i = 1, 7 do
+	for i = 1, 8 do
 		global_data.player[i].cache_color = nil
 		if global_data.player[i].color ~= '-' then
 			r[tonumber(global_data.player[i].color)] = false
@@ -275,7 +298,7 @@ end
 check_remaining_place()
 check_remaining_color()
 
-for i = 1, 7 do
+for i = 1, 8 do
 	local selector = document:GetElementById('player-' .. i)
 	local selector_place = Element.As.ElementFormControlDataSelect(
 		selector:GetElementsByClassName('select-place')[0])
@@ -288,5 +311,25 @@ for i = 1, 7 do
 	selector_color.selection = 0
 end
 
-update_numaiplayers(6)
+update_numplayers(6)
 update_colors_style()
+
+function finishup_randoms()
+
+end
+
+function launch()
+	print('event triggered')
+
+	local data = FacerUtil.table_deepcopy(FacerUtil.ini_data_default)
+
+	local num_player = global_data.num_player
+	local num_aiplayer = global_data.num_players - 1
+
+	data.Settings.AIPlayers = num_aiplayer
+
+	local ini = Facer.CSimpleIniAWrap()
+	FacerUtil.write_table_to_ini(ini, data)
+	local ini_string = ini:saveToString()
+	print(ini_string)
+end

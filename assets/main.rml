@@ -4,12 +4,6 @@
 <link type="text/rcss" href="main.rcss" />
 <link type="text/template" href="settingt.rml" />
 
-<script>
-function launch()
-	print('event triggered')
-end
-</script>
-
 </head>
 <body>
 
@@ -17,29 +11,30 @@ end
 
 	<h1>EASB Hour 丧命时刻</h1>
 
-	<div class="owner-setting player">
-		<input class="select-enabled" type="checkbox" checked disabled />
-		<input value="Translator-C" style="width: 10em;"></input>
-		<select class="select-side" name="owner-side" style="width: 10em;">
-			<option value="Random"><img class="img-flag" src="random.tga" />Random</option>
-			<option value="United States" selected><img class="img-flag" src="us.tga" />United States</option>
-			<option value="China"><img class="img-flag" src="china.tga" />China</option>
-			<option value="Russia"><img class="img-flag" src="russia.tga" />Russia</option>
-		</select>
-		<select name="owner-place" style="width: 4em;">
-			<option value="-"></option>
-			<option value="1"></option>
-			<option value="2"></option>
-		</select>
-		<select name="owner-ally" style="width: 4em;" id="owner-ally-0">
-			<option value="-"></option>
-			<option value="A"></option>
-		</select>
+	<div id="player-1">
+		<div class="owner-setting player">
+			<input class="select-enabled" type="checkbox" checked disabled />
+			<span class="owner-setting-inner">
+				<input value="Translator-C" style="width: 10em;"></input>
+				<select class="select-side" name="owner-side" style="width: 10em;">
+					<option value="Random"><img class="img-flag" src="random.tga" />Random</option>
+					<option value="United States" selected><img class="img-flag" src="us.tga" />United States</option>
+					<option value="China"><img class="img-flag" src="china.tga" />China</option>
+					<option value="Russia"><img class="img-flag" src="russia.tga" />Russia</option>
+				</select>
+				<dataselect class="select-color" name="owner-color" style="width: 4em;" source="srccolor.placeholder" fields="colors" onchange="select_color(event)"></dataselect>
+				<dataselect class="select-place" name="owner-place" style="width: 4em;" source="srclocation.placeholder" fields="places" onchange="select_place(event)"></dataselect>
+				<select class="select-ally" name="owner-ally" style="width: 4em;">
+					<option value="-" selected>-</option>
+					<option value="A">A</option>
+					<option value="B">B</option>
+					<option value="C">C</option>
+					<option value="D">D</option>
+				</select>
+			</span>
+		</div>
 	</div>
 
-	<div id="player-1">
-		<template src="owner-setting-template"></template>
-	</div>
 	<div id="player-2">
 		<template src="owner-setting-template"></template>
 	</div>
@@ -58,6 +53,18 @@ end
 	<div id="player-7">
 		<template src="owner-setting-template"></template>
 	</div>
+	<div id="player-8">
+		<template src="owner-setting-template"></template>
+	</div>
+
+	<span><input type="checkbox" />Short Game</span>
+	<span><input type="checkbox" />Crates</span>
+	<span><input type="checkbox" />Superweapons</span>
+	<span><input type="checkbox" />Build Off Ally</span>
+	<br />
+	<span><input type="range" min="1" max="6" step="1" onchange="select_speed(event)" /><span class="range-data"></span>Game Speed</span>
+	<span><input type="range" min="1" max="10000" step="1000" onchange="select_credit(event)" /><span class="range-data"></span>Credits</span>
+	<span><input type="range" min="1" max="12" step="1" onchange="select_unitcount(event)" /><span class="range-data"></span>Unit Count</span>
 
 	<div style="text-align: center; padding: 1em;">
 		<button onclick="launch(document);" id="launch-btn">Launch</button>
