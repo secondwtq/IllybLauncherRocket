@@ -155,24 +155,41 @@ input.text:disabled {
 }
 
 input.range {
-	background: rgb(0, 255, 0);
-	width: 8em;
-	height: 1em;
+	width: 7em;
+	height: 1.5em;
 }
 
 input.range slidertrack {
+	border-color: red;
+	border-width: 1px;
 	background: black;
+	margin-top: -1px;
 }
 
 input.range sliderbar {
 	background: rgb(255, 0, 0);
-	width: 0.5em;
+	width: 0.6em;
+	/*margin-top: 1px;*/
 }
 
-input.range sliderarrowinc {
-	background: rgb(0, 0, 255);
-}
-
+input.range sliderarrowinc,
 input.range sliderarrowdec {
+/*	width: 0.5em;
+	border-color: white;
+	border-width: 1px;
 	background: rgb(0, 0, 255);
+	height: 1.4em;*/
+}
+
+.range-data {
+	background: black;
+	color: white;
+	display: inline-block;
+	position: relative;
+	height: 1.5em;
+	width: 4em;
+	text-align: center;
+	border-color: red;
+	border-width: 1px;
+	margin-left: -1px;
 }

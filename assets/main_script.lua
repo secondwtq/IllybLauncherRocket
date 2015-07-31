@@ -14,6 +14,7 @@ function load_font()
 
 end
 
+math.randomseed(os.time())
 load_font()
 maincontext = rocket.contexts["main"]
 document = maincontext:LoadDocument("main.rml")
@@ -21,6 +22,7 @@ document:Show()
 
 global_data = {
 	num_players = 6,
+	num_sides = 3,
 	colors = {
 		'rgb(255, 0, 0)',
 		'rgb(0, 255, 0)',
@@ -33,6 +35,17 @@ global_data = {
 	},
 	remaining_place = { 1, 2, 3, 4, 5, 6, 7 },
 	remaining_color = { 1, 2, 3 },
+	battle_settings = {
+		mcv_redeploy = false,
+		build_off_ally = true,
+		superweapons = true,
+		crates = true,
+		short_game = true,
+
+		game_speed = 5,
+		credits = 10000,
+		unit_count = 1
+	},
 
 	player = {
 
@@ -51,7 +64,8 @@ for i = 1, 8 do
 		ally = '-',
 
 		cache_place = nil,
-		cache_color = nil
+		cache_color = nil,
+		actual_id = nil
 	}
 end
 
@@ -147,13 +161,13 @@ function setenable_aiplayer(id, enabled)
 		for i, v in pairs(selector:GetElementsByTagName('dataselect')) do
 			disable_input(v) end
 		if not enabled then
-			Element.As.ElementFormControlSelect(selector:GetElementsByClassName('select-name')[0]).selection = 0
+			for i, v in pairs({ 'select-name', 'select-color', 'select-place' }) do
+				Element.As.ElementFormControlSelect(selector:GetElementsByClassName(v)[0]).selection = 0 end
 		end
 
 		local enabled_checkbox = Element.As.ElementFormControlInput(selector:GetElementsByClassName('checkbox')[0])
 		if enabled_checkbox.checked ~= enabled then
-			enabled_checkbox.checked = enabled
-		end
+			enabled_checkbox.checked = enabled end
 	end
 end
 
@@ -203,20 +217,48 @@ end
 
 function update_rangevalue(range_element)
 	local value = Element.As.ElementFormControlInput(range_element).value
-	local data_element = value.parent_node.GetElementsByClassName('range-data')[0]
-	data_element.inner_rml = tostring(value)
+	local data_element = range_element.parent_node:GetElementsByClassName('range-data')[0]
+	data_element.inner_rml = tostring(math.floor(value))
 end
 
 function select_speed(event)
-
+	update_rangevalue(event.current_element)
+	global_data.battle_settings.game_speed = math.floor(tonumber(Element.As.ElementFormControlInput(event.current_element).value))
 end
 
-function select_credit(event)
-
+function select_credits(event)
+	update_rangevalue(event.current_element)
+	global_data.battle_settings.credits = math.floor(tonumber(Element.As.ElementFormControlInput(event.current_element).value))
 end
 
 function select_unitcount(event)
+	update_rangevalue(event.current_element)
+	global_data.battle_settings.unit_count = math.floor(tonumber(Element.As.ElementFormControlInput(event.current_element).value))
+end
 
+function select_shortgame(event)
+	local enabled = (event.parameters.value == 'enabled')
+	global_data.battle_settings.short_game = enabled
+end
+
+function select_mcvredeploy(event)
+	local enabled = (event.parameters.value == 'enabled')
+	global_data.battle_settings.mcv_redeploy = enabled
+end
+
+function select_crates(event)
+	local enabled = (event.parameters.value == 'enabled')
+	global_data.battle_settings.crates = enabled
+end
+
+function select_superweapons(event)
+	local enabled = (event.parameters.value == 'enabled')
+	global_data.battle_settings.superweapons = enabled
+end
+
+function select_buildoffally(event)
+	local enabled = (event.parameters.value == 'enabled')
+	global_data.battle_settings.build_off_ally = enabled
 end
 
 function update_numplayers(num)
@@ -314,20 +356,98 @@ end
 update_numplayers(6)
 update_colors_style()
 
-function finishup_randoms()
+-- fetch or generate random side ID with a player ID
+function sideid_for_player(player_id)
+	local sideid = tonumber(global_data.player[tonumber(player_id)].side)
+	if sideid == nil then
+		sideid = math.random(global_data.num_sides) end
+	return sideid
+end
 
+-- maybe we need some 'premature optimization' :D
+-- for a specific player each call, so update to
+-- 'global_data.remaining_place/remaining_color' is needed
+-- before we return
+function finish_place_n_color_for_player(player_id)
+	player_id = tonumber(player_id)
+
+	-- this exists for some 'ambiguity' in the meaning of 'global_data.num_players'
+	-- it's the actual count of players we have, or the number of slots the map has?
+	local locations_has = global_data.num_players
+	local locations_taken = FacerUtil.array_to_hash(global_data.remaining_place)
+	local colors_taken = FacerUtil.array_to_hash(global_data.remaining_color)
+
+	if global_data.player[player_id].place == '-' then
+		while true do
+			local candidate = tostring(math.random(locations_has))
+			if locations_taken[candidate] ~= nil then
+				global_data.player[player_id].place = candidate
+				break
+			end
+		end
+	end
+
+	if global_data.player[player_id].color == '-' then
+		while true do
+			local candidate = tostring(math.random(#global_data.colors))
+			if colors_taken[candidate] ~= nil then
+				global_data.player[player_id].color = candidate
+				break
+			end
+		end
+	end
+
+	check_remaining_place()
+	check_remaining_color()
 end
 
 function launch()
-	print('event triggered')
-
 	local data = FacerUtil.table_deepcopy(FacerUtil.ini_data_default)
 
-	local num_player = global_data.num_player
+	local num_player = global_data.num_players
 	local num_aiplayer = global_data.num_players - 1
+
+	data.Settings.Name = "CBSB"
+	data.Settings.CustomLoadScreen = "easb.pcx"
+	data.Settings.Seed = 1208
 
 	data.Settings.AIPlayers = num_aiplayer
 
+	data.Settings.ShortGame = global_data.battle_settings.short_game
+	data.Settings.Crates = global_data.battle_settings.crates
+	data.Settings.MCVRedeploy = global_data.battle_settings.mcv_redeploy
+	data.Settings.Superweapons = global_data.battle_settings.superweapons
+	data.Settings.BuildOffAlly = global_data.battle_settings.build_off_ally
+
+	data.Settings.GameSpeed = global_data.battle_settings.game_speed
+	data.Settings.Credits = global_data.battle_settings.credits
+	data.Settings.UnitCount = global_data.battle_settings.unit_count
+
+	finish_place_n_color_for_player(1)
+	data.SpawnLocations['Multi1'] = tonumber(global_data.player[1].place) - 1
+	data.Settings.Color = tonumber(global_data.player[1].color) - 1
+	data.Settings.Side = sideid_for_player(1)
+
+	local startid = 2
+	for i = 2, num_player do
+		local handicap = tonumber(global_data.player[i].name)
+		if handicap ~= nil then -- do not count 'None' players
+
+			finish_place_n_color_for_player(i)
+
+			global_data.player[i].actual_id = startid
+			local prefix = 'Multi' .. startid
+
+			data.HouseHandicaps[prefix] = handicap
+			data.SpawnLocations[prefix] = tonumber(global_data.player[i].place) - 1
+			data.HouseColors[prefix] = tonumber(global_data.player[i].color) - 1
+			data.HouseCountries[prefix] = sideid_for_player(i)
+
+			startid = startid + 1
+		end
+	end
+
+	-- create INI object and write to it
 	local ini = Facer.CSimpleIniAWrap()
 	FacerUtil.write_table_to_ini(ini, data)
 	local ini_string = ini:saveToString()

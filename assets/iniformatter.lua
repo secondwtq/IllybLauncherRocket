@@ -33,9 +33,9 @@ FacerUtil.ini_data_default = {
 
 	HouseColors = { },
 
-	IsSpectator = { },
+	SpawnLocations = { },
 
-	SpawnLocations = { }
+	IsSpectator = { }
 }
 
 -- lua-users.org/wiki/CopyTable
@@ -70,5 +70,16 @@ function FacerUtil.generate_table_sequence(len)
 	local ret = { }
 	for i = 1, len do
 		table.insert(ret, i) end
+	return ret
+end
+
+-- { 1, 2, 3 } -> { 1 = default_value, 2 = default_value, 3 = default_value }
+--	'default_value' defaults false
+function FacerUtil.array_to_hash(src, default_value)
+	if default_value == nil then default_value = false end
+
+	local ret = { }
+	for i, v in pairs(src) do 
+		ret[v] = default_value end
 	return ret
 end

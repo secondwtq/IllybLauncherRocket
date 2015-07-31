@@ -17,10 +17,10 @@
 			<span class="owner-setting-inner">
 				<input value="Translator-C" style="width: 10em;"></input>
 				<select class="select-side" name="owner-side" style="width: 10em;">
-					<option value="Random"><img class="img-flag" src="random.tga" />Random</option>
-					<option value="United States" selected><img class="img-flag" src="us.tga" />United States</option>
-					<option value="China"><img class="img-flag" src="china.tga" />China</option>
-					<option value="Russia"><img class="img-flag" src="russia.tga" />Russia</option>
+					<option value="-"><img class="img-flag" src="random.tga" />Random</option>
+					<option value="0" selected><img class="img-flag" src="us.tga" />United States</option>
+					<option value="1"><img class="img-flag" src="china.tga" />China</option>
+					<option value="2"><img class="img-flag" src="russia.tga" />Russia</option>
 				</select>
 				<dataselect class="select-color" name="owner-color" style="width: 4em;" source="srccolor.placeholder" fields="colors" onchange="select_color(event)"></dataselect>
 				<dataselect class="select-place" name="owner-place" style="width: 4em;" source="srclocation.placeholder" fields="places" onchange="select_place(event)"></dataselect>
@@ -57,14 +57,24 @@
 		<template src="owner-setting-template"></template>
 	</div>
 
-	<span><input type="checkbox" />Short Game</span>
-	<span><input type="checkbox" />Crates</span>
-	<span><input type="checkbox" />Superweapons</span>
-	<span><input type="checkbox" />Build Off Ally</span>
+	<span><input type="checkbox" checked onchange="select_shortgame(event)" value="enabled" />Short Game</span>
+	<span><input type="checkbox" onchange="select_mcvredeploy(event)" value="enabled" />MCV Redeploy</span>
+	<span><input type="checkbox" checked onchange="select_crates(event)" value="enabled" />Crates</span>
+	<span><input type="checkbox" checked onchange="select_superweapons(event)" value="enabled" />Superweapons</span>
+	<span><input type="checkbox" checked onchange="select_buildoffally(event)" value="enabled" />Build Off Ally</span>
 	<br />
-	<span><input type="range" min="1" max="6" step="1" onchange="select_speed(event)" /><span class="range-data"></span>Game Speed</span>
-	<span><input type="range" min="1" max="10000" step="1000" onchange="select_credit(event)" /><span class="range-data"></span>Credits</span>
-	<span><input type="range" min="1" max="12" step="1" onchange="select_unitcount(event)" /><span class="range-data"></span>Unit Count</span>
+	<span>
+		<input type="range" min="1" max="6" step="1" value="5" onchange="select_speed(event)" />
+		<span class="range-data"></span> Game Speed
+	</span>
+	<span>
+		<input type="range" min="0" max="10000" step="1000" value="10000" onchange="select_credits(event)" />
+		<span class="range-data"></span> Credits
+	</span>
+	<span>
+		<input type="range" min="1" max="12" step="1" onchange="select_unitcount(event)" />
+		<span class="range-data"></span> Unit Count
+	</span>
 
 	<div style="text-align: center; padding: 1em;">
 		<button onclick="launch(document);" id="launch-btn">Launch</button>

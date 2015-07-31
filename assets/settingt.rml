@@ -7,15 +7,16 @@
 		<span class="owner-setting-inner">
 			<select class="select-name" name="owner-name" style="width: 10em;" onchange="select_name(event)">
 				<option value="none">None</option>
-				<option value="easy" selected>Easy AI</option>
-				<option value="medium">Medium AI</option>
-				<option value="hard">Hard AI</option>
+				<!-- [HouseHandicaps] in the INI, decreasing with the difficulty increase -->
+				<option value="2" selected>Easy AI</option>
+				<option value="1">Medium AI</option>
+				<option value="0">Hard AI</option>
 			</select>
 			<select class="select-side" name="owner-side" style="width: 10em;" onchange="select_side(event)">
-				<option value="Random" selected><img class="img-flag" src="random.tga" />Random</option>
-				<option value="United States"><img class="img-flag" src="us.tga" />United States</option>
-				<option value="China"><img class="img-flag" src="china.tga" />China</option>
-				<option value="Russia"><img class="img-flag" src="russia.tga" />Russia</option>
+				<option value="-" selected><img class="img-flag" src="random.tga" />Random</option>
+				<option value="0"><img class="img-flag" src="us.tga" />United States</option>
+				<option value="1"><img class="img-flag" src="china.tga" />China</option>
+				<option value="2"><img class="img-flag" src="russia.tga" />Russia</option>
 			</select>
 			<dataselect class="select-color" name="owner-color" style="width: 4em;" source="srccolor.placeholder" fields="colors" onchange="select_color(event)"></dataselect>
 			<dataselect class="select-place" name="owner-place" style="width: 4em;" source="srclocation.placeholder" fields="places" onchange="select_place(event)"></dataselect>
