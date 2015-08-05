@@ -76,55 +76,10 @@ public:
 }
 
 namespace Facer {
-namespace Middlewares {
+namespace Port {
 
 InputEvent createEvent(InputEvent::EventType type);
 
-}
-}
-
-class GLFWwindow;
-
-namespace Facer {
-namespace Middlewares {
-namespace GLFW {
-
-InputEvent createEventMouseMove(GLFWwindow *window, int x, int y);
-InputEvent createEventMouseButton(GLFWwindow *window, int button, int action, int mods);
-InputEvent createEventMouseWheel(GLFWwindow *window, double xoffset, double yoffset);
-InputEvent createEventKey(GLFWwindow *window, int key, int scancode, int action, int mods);
-InputEvent createEventInputText(GLFWwindow *window, int charpoint);
-
-InputEvent::ModifierState generateModifierState(int mods);
-InputEvent::ModifierState generateModifierState(GLFWwindow *window);
-InputKeyCode getKeyCode(int key);
-
-}
-}
-}
-
-namespace Rocket {
-namespace Core {
-class Context;
-}
-}
-
-#include <Rocket/Core/Input.h>
-
-namespace Facer {
-namespace Middlewares {
-namespace Rocket {
-
-int getMouseButtonIdentifier(InputEvent::MouseButton button);
-
-int generateModifierState(const InputEvent::ModifierState& state);
-inline int generateModifierState(const InputEvent& state) {
-    return generateModifierState(state.modifierState); }
-::Rocket::Core::Input::KeyIdentifier getKeyCode(InputKeyCode code);
-
-void processEvent(::Rocket::Core::Context *ctx, const InputEvent& event);
-
-}
 }
 }
 

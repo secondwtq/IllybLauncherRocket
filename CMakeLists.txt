@@ -3,9 +3,12 @@ project(IllybLauncher)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
 
-set(SOURCE_FILES main.cxx ShellRenderInterfaceOpenGL.cpp ShellSystemInterface.cpp ShellFileInterface.cpp)
-add_executable(IllybLauncher ${SOURCE_FILES} RocketEventInstancer.hxx RocketEventListener.hxx RocketEventListener.cxx
-FacerEvent.hxx FacerEvent.cxx config.hxx config.cxx INIBinding.hxx INIBinding.cxx FacerEventKey.hxx FacerEventKey.cxx)
+set(SOURCE_FACER_EVENT FacerEvent.hxx FacerEventKey.hxx FacerEvent.cxx
+    FacerEventPortGLFW.hxx FacerEventPortGLFW.cxx FacerEventPortRocket.hxx FacerEventPortRocket.cxx)
+
+set(SOURCE_FILES ${SOURCE_FACER_EVENT} main.cxx ShellRenderInterfaceOpenGL.cpp config.hxx config.cxx
+    ShellSystemInterface.cpp ShellFileInterface.cpp INIBinding.hxx INIBinding.cxx)
+add_executable(IllybLauncher ${SOURCE_FILES} RocketEventInstancer.hxx RocketEventListener.hxx RocketEventListener.cxx)
 
 set(HOWARD_LIBS ${HOWARD_LIBS} glfw3)
 

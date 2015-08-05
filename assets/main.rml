@@ -15,7 +15,7 @@
 		<div class="owner-setting player">
 			<input class="select-enabled" type="checkbox" checked disabled />
 			<span class="owner-setting-inner">
-				<input value="Translator-C" style="width: 10em;"></input>
+				<input class="text" value="Translator-C"></input>
 				<select class="select-side" name="owner-side" style="width: 10em;">
 					<option value="-"><img class="img-flag" src="random.tga" />Random</option>
 					<option value="0" selected><img class="img-flag" src="us.tga" />United States</option>
@@ -64,15 +64,15 @@
 	<span><input type="checkbox" checked onchange="select_buildoffally(event)" value="enabled" />Build Off Ally</span>
 	<br />
 	<span>
-		<input type="range" min="1" max="6" step="1" value="5" onchange="select_speed(event)" />
+		<input class="select-speed" type="range" min="1" max="6" step="1" value="5" onchange="select_speed(event)" />
 		<span class="range-data"></span> Game Speed
 	</span>
 	<span>
-		<input type="range" min="0" max="10000" step="1000" value="10000" onchange="select_credits(event)" />
+		<input class="select-credits" type="range" min="0" max="10000" step="1000" value="10000" onchange="select_credits(event)" />
 		<span class="range-data"></span> Credits
 	</span>
 	<span>
-		<input type="range" min="1" max="12" step="1" onchange="select_unitcount(event)" />
+		<input class="select-unitcount" type="range" min="1" max="12" step="1" value="12" onchange="select_unitcount(event)" />
 		<span class="range-data"></span> Unit Count
 	</span>
 

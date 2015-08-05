@@ -17,6 +17,8 @@
 
 #include "INIBinding.hxx"
 #include "FacerEvent.hxx"
+#include "FacerEventPortGLFW.hxx"
+#include "FacerEventPortRocket.hxx"
 
 #include "config.hxx"
 
@@ -33,28 +35,28 @@ void glfw_keycb(GLFWwindow *window, int key, int scancode, int action, int mods)
             return;
         }
     }
-    Facer::InputEvent e = Facer::Middlewares::GLFW::createEventKey(window, key, scancode, action, mods);
-    Facer::Middlewares::Rocket::processEvent(rocket_ctx, e);
+    Facer::InputEvent e = Facer::Port::GLFW::createEventKey(window, key, scancode, action, mods);
+    Facer::Port::Rocket::processEvent(rocket_ctx, e);
 }
 
 void glfw_cursorcb(GLFWwindow *window, double x, double y) {
-    Facer::InputEvent e = Facer::Middlewares::GLFW::createEventMouseMove(window, x, y);
-    Facer::Middlewares::Rocket::processEvent(rocket_ctx, e);
+    Facer::InputEvent e = Facer::Port::GLFW::createEventMouseMove(window, x, y);
+    Facer::Port::Rocket::processEvent(rocket_ctx, e);
 }
 
 void glfw_mousecb(GLFWwindow *window, int button, int action, int mods) {
-    Facer::InputEvent e = Facer::Middlewares::GLFW::createEventMouseButton(window, button, action, mods);
-    Facer::Middlewares::Rocket::processEvent(rocket_ctx, e);
+    Facer::InputEvent e = Facer::Port::GLFW::createEventMouseButton(window, button, action, mods);
+    Facer::Port::Rocket::processEvent(rocket_ctx, e);
 }
 
 void glfw_wheelcb(GLFWwindow *window, double xoffset, double yoffset) {
-    Facer::InputEvent e = Facer::Middlewares::GLFW::createEventMouseWheel(window, xoffset, yoffset);
-    Facer::Middlewares::Rocket::processEvent(rocket_ctx, e);
+    Facer::InputEvent e = Facer::Port::GLFW::createEventMouseWheel(window, xoffset, yoffset);
+    Facer::Port::Rocket::processEvent(rocket_ctx, e);
 }
 
 void glfw_charcb(GLFWwindow *window, unsigned int codepoint) {
-    Facer::InputEvent e = Facer::Middlewares::GLFW::createEventInputText(window, codepoint);
-    Facer::Middlewares::Rocket::processEvent(rocket_ctx, e);
+    Facer::InputEvent e = Facer::Port::GLFW::createEventInputText(window, codepoint);
+    Facer::Port::Rocket::processEvent(rocket_ctx, e);
 }
 
 void main_loop() {

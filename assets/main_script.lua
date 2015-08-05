@@ -340,21 +340,29 @@ end
 check_remaining_place()
 check_remaining_color()
 
-for i = 1, 8 do
-	local selector = document:GetElementById('player-' .. i)
-	local selector_place = Element.As.ElementFormControlDataSelect(
-		selector:GetElementsByClassName('select-place')[0])
-	local selector_color = Element.As.ElementFormControlDataSelect(
-		selector:GetElementsByClassName('select-color')[0])
+update_numplayers(6)
 
-	selector_place:SetDataSource('srclocation.place' .. i)
-	selector_place.selection = 0
-	selector_color:SetDataSource('srccolor.color' .. i)
-	selector_color.selection = 0
+function page_load(document)
+
+	for i = 1, 8 do
+		local selector = document:GetElementById('player-' .. i)
+		local selector_place = Element.As.ElementFormControlDataSelect(
+			selector:GetElementsByClassName('select-place')[0])
+		local selector_color = Element.As.ElementFormControlDataSelect(
+			selector:GetElementsByClassName('select-color')[0])
+
+		selector_place:SetDataSource('srclocation.place' .. i)
+		selector_place.selection = 0
+		selector_color:SetDataSource('srccolor.color' .. i)
+		selector_color.selection = 0
+	end
+	
+	for i, name in pairs({ 'speed', 'credits', 'unitcount' }) do
+		update_rangevalue(document:GetElementsByClassName('select-' .. name)[0]) end
+	update_colors_style()
 end
 
-update_numplayers(6)
-update_colors_style()
+page_load(document)
 
 -- fetch or generate random side ID with a player ID
 function sideid_for_player(player_id)
@@ -399,57 +407,4 @@ function finish_place_n_color_for_player(player_id)
 
 	check_remaining_place()
 	check_remaining_color()
-end
-
-function launch()
-	local data = FacerUtil.table_deepcopy(FacerUtil.ini_data_default)
-
-	local num_player = global_data.num_players
-	local num_aiplayer = global_data.num_players - 1
-
-	data.Settings.Name = "CBSB"
-	data.Settings.CustomLoadScreen = "easb.pcx"
-	data.Settings.Seed = 1208
-
-	data.Settings.AIPlayers = num_aiplayer
-
-	data.Settings.ShortGame = global_data.battle_settings.short_game
-	data.Settings.Crates = global_data.battle_settings.crates
-	data.Settings.MCVRedeploy = global_data.battle_settings.mcv_redeploy
-	data.Settings.Superweapons = global_data.battle_settings.superweapons
-	data.Settings.BuildOffAlly = global_data.battle_settings.build_off_ally
-
-	data.Settings.GameSpeed = global_data.battle_settings.game_speed
-	data.Settings.Credits = global_data.battle_settings.credits
-	data.Settings.UnitCount = global_data.battle_settings.unit_count
-
-	finish_place_n_color_for_player(1)
-	data.SpawnLocations['Multi1'] = tonumber(global_data.player[1].place) - 1
-	data.Settings.Color = tonumber(global_data.player[1].color) - 1
-	data.Settings.Side = sideid_for_player(1)
-
-	local startid = 2
-	for i = 2, num_player do
-		local handicap = tonumber(global_data.player[i].name)
-		if handicap ~= nil then -- do not count 'None' players
-
-			finish_place_n_color_for_player(i)
-
-			global_data.player[i].actual_id = startid
-			local prefix = 'Multi' .. startid
-
-			data.HouseHandicaps[prefix] = handicap
-			data.SpawnLocations[prefix] = tonumber(global_data.player[i].place) - 1
-			data.HouseColors[prefix] = tonumber(global_data.player[i].color) - 1
-			data.HouseCountries[prefix] = sideid_for_player(i)
-
-			startid = startid + 1
-		end
-	end
-
-	-- create INI object and write to it
-	local ini = Facer.CSimpleIniAWrap()
-	FacerUtil.write_table_to_ini(ini, data)
-	local ini_string = ini:saveToString()
-	print(ini_string)
 end
