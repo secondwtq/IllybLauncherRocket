@@ -10,7 +10,10 @@
 #ifndef ILLYBLAUNCHER_FACEREVENT_HXX
 #define ILLYBLAUNCHER_FACEREVENT_HXX
 
-#include <GLFW/glfw3.h>
+#include <string>
+
+#include "FacerEventKey.hxx"
+
 namespace Facer {
 
 class InputEvent {
@@ -26,7 +29,9 @@ public:
         MouseWheel,
 
         KeyPress,
-        KeyRelease
+        KeyRelease,
+
+        InputText
     };
 
     // WebKit the wise!
@@ -53,11 +58,14 @@ public:
 
     EventType type = EventType::NoType;
     MouseButton primaryButton = MouseButton::NOBUTTON;
+    InputKeyCode keyCode = InputKeyCode::KNull;
     unsigned short cursorPosition[2];
     MouseButtonState buttonState;
     ModifierState modifierState;
+    std::string input { };
     long long timestamp = 0;
 
+    // just a helper
     template <typename T>
     InputEvent& setCursorPosition(T xpos, T ypos) {
         this->cursorPosition[0] = static_cast<unsigned short>(xpos);
@@ -84,9 +92,12 @@ namespace GLFW {
 InputEvent createEventMouseMove(GLFWwindow *window, int x, int y);
 InputEvent createEventMouseButton(GLFWwindow *window, int button, int action, int mods);
 InputEvent createEventMouseWheel(GLFWwindow *window, double xoffset, double yoffset);
+InputEvent createEventKey(GLFWwindow *window, int key, int scancode, int action, int mods);
+InputEvent createEventInputText(GLFWwindow *window, int charpoint);
 
 InputEvent::ModifierState generateModifierState(int mods);
 InputEvent::ModifierState generateModifierState(GLFWwindow *window);
+InputKeyCode getKeyCode(int key);
 
 }
 }
@@ -98,6 +109,8 @@ class Context;
 }
 }
 
+#include <Rocket/Core/Input.h>
+
 namespace Facer {
 namespace Middlewares {
 namespace Rocket {
@@ -107,6 +120,7 @@ int getMouseButtonIdentifier(InputEvent::MouseButton button);
 int generateModifierState(const InputEvent::ModifierState& state);
 inline int generateModifierState(const InputEvent& state) {
     return generateModifierState(state.modifierState); }
+::Rocket::Core::Input::KeyIdentifier getKeyCode(InputKeyCode code);
 
 void processEvent(::Rocket::Core::Context *ctx, const InputEvent& event);
 

@@ -26,17 +26,15 @@ Rocket::Core::Context *rocket_ctx = nullptr;
 void error_callback(int error, const char *desc) {
     printf("%s\n", desc); }
 
-void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+void glfw_keycb(GLFWwindow *window, int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
-        if (key == GLFW_KEY_ESCAPE)
+        if (key == GLFW_KEY_ESCAPE) {
             glfwSetWindowShouldClose(window, GL_TRUE);
+            return;
+        }
     }
-
-    if (action == GLFW_PRESS) {
-//        rocket_ctx->ProcessKeyDown();
-    } else if (action == GLFW_RELEASE) {
-
-    }
+    Facer::InputEvent e = Facer::Middlewares::GLFW::createEventKey(window, key, scancode, action, mods);
+    Facer::Middlewares::Rocket::processEvent(rocket_ctx, e);
 }
 
 void glfw_cursorcb(GLFWwindow *window, double x, double y) {
@@ -51,6 +49,11 @@ void glfw_mousecb(GLFWwindow *window, int button, int action, int mods) {
 
 void glfw_wheelcb(GLFWwindow *window, double xoffset, double yoffset) {
     Facer::InputEvent e = Facer::Middlewares::GLFW::createEventMouseWheel(window, xoffset, yoffset);
+    Facer::Middlewares::Rocket::processEvent(rocket_ctx, e);
+}
+
+void glfw_charcb(GLFWwindow *window, unsigned int codepoint) {
+    Facer::InputEvent e = Facer::Middlewares::GLFW::createEventInputText(window, codepoint);
     Facer::Middlewares::Rocket::processEvent(rocket_ctx, e);
 }
 
@@ -69,10 +72,12 @@ int main() {
           LauncherConfig::instance().height, "IllybLauncher", nullptr, nullptr);
     if (!window) {
         glfwTerminate(); exit(-1); }
-    glfwSetKeyCallback(window, key_callback);
+
+    glfwSetKeyCallback(window, glfw_keycb);
     glfwSetCursorPosCallback(window, glfw_cursorcb);
     glfwSetMouseButtonCallback(window, glfw_mousecb);
     glfwSetScrollCallback(window, glfw_wheelcb);
+    glfwSetCharCallback(window, glfw_charcb);
     glfwMakeContextCurrent(window);
 
     ShellRenderInterfaceOpenGL gl_renderer;

@@ -11,6 +11,11 @@
 
 #include <time.h>
 
+#include <stdio.h>
+
+#include <locale>
+#include <codecvt>
+
 namespace Facer {
 namespace Middlewares {
 
@@ -105,6 +110,78 @@ InputEvent createEventMouseWheel(GLFWwindow *window, double xoffset, double yoff
     return ret;
 }
 
+InputEvent createEventInputText(GLFWwindow *window, int charpoint) {
+    InputEvent ret = createEvent(InputEvent::InputText);
+
+    double xpos = 0, ypos = 0;
+    glfwGetCursorPos(window, &xpos, &ypos);
+    ret.setCursorPosition(xpos, ypos);
+    ret.modifierState = generateModifierState(window);
+
+    std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cv;
+    std::string r = cv.to_bytes(charpoint);
+    ret.input = r;
+
+    return ret;
+}
+
+InputKeyCode getKeyCode(int key) {
+
+    if (key >= GLFW_KEY_A && key <= GLFW_KEY_Z) {
+        return static_cast<InputKeyCode>(KLetterCapA + key - GLFW_KEY_A); }
+
+    if (key >= GLFW_KEY_0 && key <= GLFW_KEY_9) {
+        return static_cast<InputKeyCode>(KNumber0 + key - GLFW_KEY_0); }
+
+#define _FACER_DEFKEY_(GLFW_KEY, FACER_KEY) case GLFW_KEY: return FACER_KEY;
+
+    switch (key) {
+        _FACER_DEFKEY_(GLFW_KEY_SPACE, KSpace);
+        _FACER_DEFKEY_(GLFW_KEY_APOSTROPHE, KQuoteSingle);
+        _FACER_DEFKEY_(GLFW_KEY_COMMA, KComma)
+        _FACER_DEFKEY_(GLFW_KEY_MINUS, KHyphen);
+        _FACER_DEFKEY_(GLFW_KEY_PERIOD, KPeriod);
+        _FACER_DEFKEY_(GLFW_KEY_SLASH, KSlash);
+        _FACER_DEFKEY_(GLFW_KEY_SEMICOLON, KSemicolon);
+        _FACER_DEFKEY_(GLFW_KEY_EQUAL, KEqual);
+        _FACER_DEFKEY_(GLFW_KEY_LEFT_BRACKET, KBracketLeft);
+        _FACER_DEFKEY_(GLFW_KEY_BACKSLASH, KBackslash);
+        _FACER_DEFKEY_(GLFW_KEY_RIGHT_BRACKET, KBracketRight);
+        _FACER_DEFKEY_(GLFW_KEY_GRAVE_ACCENT, KGraveAccent);
+
+        _FACER_DEFKEY_(GLFW_KEY_ESCAPE, KEscape);
+        _FACER_DEFKEY_(GLFW_KEY_ENTER, KReturn);
+        _FACER_DEFKEY_(GLFW_KEY_TAB, KTab);
+        _FACER_DEFKEY_(GLFW_KEY_BACKSPACE, KBackspace);
+        _FACER_DEFKEY_(GLFW_KEY_DELETE, KDelete);
+
+        default:
+            return KNull;
+    }
+
+#undef _FACER_DEFKEY_
+}
+
+InputEvent createEventKey(GLFWwindow *window, int key, int scancode, int action, int mods) {
+    InputEvent::EventType type = InputEvent::NoType;
+    if (action == GLFW_PRESS) {
+        type = InputEvent::KeyPress;
+    } else if (action == GLFW_RELEASE) {
+        type = InputEvent::KeyRelease; }
+    InputEvent ret = createEvent(type);
+
+    double xpos = 0, ypos = 0;
+    glfwGetCursorPos(window, &xpos, &ypos);
+    ret.setCursorPosition(xpos, ypos);
+    ret.modifierState = generateModifierState(mods);
+
+    ret.keyCode = getKeyCode(key);
+    if (ret.keyCode == KNull) {
+        printf("FacerInputEvent (port source GLFW): Unknown source keycode %d!\n", key); }
+
+    return ret;
+}
+
 }
 }
 }
@@ -142,6 +219,61 @@ int getMouseButtonIdentifier(InputEvent::MouseButton button) {
     }
 }
 
+::Rocket::Core::Input::KeyIdentifier getKeyCode(InputKeyCode code) {
+    using ::Rocket::Core::Input::KeyIdentifier;
+
+    if (code >= KLetterCapA && code <= KLetterCapZ) {
+        return static_cast<KeyIdentifier>(KeyIdentifier::KI_A + code - KLetterCapA); }
+    if (code >= KNumber0 && code <= KNumber9) {
+        return static_cast<KeyIdentifier>(KeyIdentifier::KI_0 + code - KNumber0); }
+
+#define _FACER_DEFKEY_(FACER_KEY, ROCKEY) case FACER_KEY: return KeyIdentifier::ROCKEY;
+
+    switch (code) {
+        _FACER_DEFKEY_(KSpace, KI_SPACE);
+
+        _FACER_DEFKEY_(KSemicolon, KI_OEM_1);
+        _FACER_DEFKEY_(KHyphen, KI_OEM_MINUS);
+        _FACER_DEFKEY_(KPeriod, KI_OEM_PERIOD);
+        _FACER_DEFKEY_(KSlash, KI_OEM_2);
+        _FACER_DEFKEY_(KGraveAccent, KI_OEM_3);
+        _FACER_DEFKEY_(KBracketLeft, KI_OEM_4);
+        _FACER_DEFKEY_(KBackslash, KI_OEM_5);
+        _FACER_DEFKEY_(KBracketRight, KI_OEM_6);
+        _FACER_DEFKEY_(KQuoteSingle, KI_OEM_7);
+
+        _FACER_DEFKEY_(KBackspace, KI_BACK);
+        _FACER_DEFKEY_(KTab, KI_TAB);
+        _FACER_DEFKEY_(KReturn, KI_RETURN);
+
+        _FACER_DEFKEY_(KEscape, KI_ESCAPE);
+
+        _FACER_DEFKEY_(KDelete, KI_DELETE);
+
+        default:
+            printf("FacerInputEvent (port target libRocket): Unknown event keycode %d!\n", code);
+            return KeyIdentifier::KI_UNKNOWN;
+            break;
+    }
+
+#undef _FACER_DEFKEY_
+}
+
+namespace {
+
+template<class faceT>
+class usable_faceT : public faceT {
+public:
+    using faceT::faceT;
+
+    ~usable_faceT() { }
+};
+
+template<typename internT, typename externT, typename stateT>
+using usable_codecvt = usable_faceT<std::codecvt<internT, externT, stateT>>;
+
+}
+
 void processEvent(::Rocket::Core::Context *ctx, const InputEvent& event) {
     switch (event.type) {
         case InputEvent::MouseMove:
@@ -157,6 +289,20 @@ void processEvent(::Rocket::Core::Context *ctx, const InputEvent& event) {
 
         case InputEvent::MouseWheel:
             ctx->ProcessMouseWheel(10, generateModifierState(event));
+            break;
+
+        case InputEvent::KeyPress:
+            ctx->ProcessKeyDown(getKeyCode(event.keyCode), generateModifierState(event));
+            break;
+        case InputEvent::KeyRelease:
+            ctx->ProcessKeyUp(getKeyCode(event.keyCode), generateModifierState(event));
+            break;
+
+        case InputEvent::InputText: {
+            std::wstring_convert<usable_codecvt<char16_t, char, std::mbstate_t>, char16_t> cv;
+            std::u16string u16 = cv.from_bytes(event.input);
+            ctx->ProcessTextInput(::Rocket::Core::String(u16.length() * 2, reinterpret_cast<const char *>(u16.c_str())));
+        }
             break;
 
         default:

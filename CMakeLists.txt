@@ -5,7 +5,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
 
 set(SOURCE_FILES main.cxx ShellRenderInterfaceOpenGL.cpp ShellSystemInterface.cpp ShellFileInterface.cpp)
 add_executable(IllybLauncher ${SOURCE_FILES} RocketEventInstancer.hxx RocketEventListener.hxx RocketEventListener.cxx
-FacerEvent.hxx FacerEvent.cxx config.hxx config.cxx INIBinding.hxx INIBinding.cxx)
+FacerEvent.hxx FacerEvent.cxx config.hxx config.cxx INIBinding.hxx INIBinding.cxx FacerEventKey.hxx FacerEventKey.cxx)
 
 set(HOWARD_LIBS ${HOWARD_LIBS} glfw3)
 
