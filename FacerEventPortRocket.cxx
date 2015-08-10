@@ -86,6 +86,7 @@ int getMouseButtonIdentifier(InputEvent::MouseButton button) {
 #undef _FACER_DEFKEY_
 }
 
+// stackoverflow.com/questions/11086183/encode-decode-stdstring-to-utf-16
 namespace {
 
 template<class faceT>

@@ -9,7 +9,7 @@
 
 #include "ShellRenderInterfaceOpenGL.h"
 #include "ShellSystemInterface.h"
-#include "ShellFileInterface.h"
+#include "CABALPortRocket.hxx"
 #include "RocketEventInstancer.hxx"
 
 #include <Rocket/Core/Lua/Interpreter.h>
@@ -19,6 +19,8 @@
 #include "FacerEvent.hxx"
 #include "FacerEventPortGLFW.hxx"
 #include "FacerEventPortRocket.hxx"
+
+#include "CABAL.hxx"
 
 #include "config.hxx"
 
@@ -66,9 +68,16 @@ void main_loop() {
     rocket_ctx->Render();
 }
 
-int main() {
+int main(int argc, const char *argv[]) {
 
     assert(glfwInit());
+
+    assert(CABAL::init(argv[0]));
+    CABAL::addSearchPath(".");
+    CABAL::addSearchPath("main.7z");
+    CABAL::addSearchPath("fonts.7z");
+    CABAL::addSearchPath("images.7z");
+
     glfwSetErrorCallback(error_callback);
     GLFWwindow *window = glfwCreateWindow(LauncherConfig::instance().width,
           LauncherConfig::instance().height, "IllybLauncher", nullptr, nullptr);
@@ -132,6 +141,7 @@ int main() {
     Rocket::Core::Lua::Interpreter::Shutdown();
     Rocket::Core::Shutdown();
     glfwDestroyWindow(window);
+    CABAL::dispose();
     glfwTerminate();
     return 0;
 }

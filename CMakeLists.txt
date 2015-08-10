@@ -7,7 +7,8 @@ set(SOURCE_FACER_EVENT FacerEvent.hxx FacerEventKey.hxx FacerEvent.cxx
     FacerEventPortGLFW.hxx FacerEventPortGLFW.cxx FacerEventPortRocket.hxx FacerEventPortRocket.cxx)
 
 set(SOURCE_FILES ${SOURCE_FACER_EVENT} main.cxx ShellRenderInterfaceOpenGL.cpp config.hxx config.cxx
-    ShellSystemInterface.cpp ShellFileInterface.cpp INIBinding.hxx INIBinding.cxx)
+    CABALPortRocket.hxx CABALPortRocket.cxx INIBinding.hxx INIBinding.cxx CABAL.hxx CABAL.cxx
+    ShellSystemInterface.cpp ShellSystemInterface.h)
 add_executable(IllybLauncher ${SOURCE_FILES} RocketEventInstancer.hxx RocketEventListener.hxx RocketEventListener.cxx)
 
 set(HOWARD_LIBS ${HOWARD_LIBS} glfw3)
@@ -34,5 +35,5 @@ set(ROCKET_CORELIBS ${ROCKET_CORELIBS} RocketCore RocketControls RocketDebugger)
 set(ROCKET_LUALIBS ${ROCKET_LUALIBS} RocketCoreLua RocketControlsLua)
 set(LUA_LIBRARIES ${LUA_LIBRARIES} luajit-5.1)
 
-set(HOWARD_LIBS ${HOWARD_LIBS} ${ROCKET_CORELIBS} ${ROCKET_LUALIBS} ${LUA_LIBRARIES})
+set(HOWARD_LIBS ${HOWARD_LIBS} ${ROCKET_CORELIBS} ${ROCKET_LUALIBS} ${LUA_LIBRARIES} physfs)
 target_link_libraries(IllybLauncher ${HOWARD_LIBS})
