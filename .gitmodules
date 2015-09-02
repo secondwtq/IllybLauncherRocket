@@ -1,3 +1,9 @@
-[submodule "simpleini"]
-	path = simpleini
+[submodule "third_party/stb"]
+	path = third_party/stb
+	url = https://github.com/nothings/stb
+[submodule "third_party/simpleini"]
+	path = third_party/simpleini
 	url = git@github.com:brofield/simpleini.git
+[submodule "third_party/LuaBridge"]
+	path = third_party/LuaBridge
+	url = https://github.com/secondwtq/LuaBridge

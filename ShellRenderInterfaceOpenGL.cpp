@@ -29,22 +29,21 @@
 #include "ShellRenderInterfaceExtensions.h"
 #include "ShellRenderInterfaceOpenGL.h"
 
-#include <stb/stb_image.h>
+#include "thirdpt/stb_image.hxx"
 
 #define GL_CLAMP_TO_EDGE 0x812F
 
 using namespace Rocket;
 
-ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL()
-{
+ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL() {
 	m_rocket_context = NULL;
 	m_width = 0;
 	m_height = 0;
 }
 
 // Called by Rocket when it wants to render geometry that it does not wish to optimise.
-void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, int ROCKET_UNUSED_PARAMETER(num_vertices), int* indices, int num_indices, const Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation)
-{
+void ShellRenderInterfaceOpenGL::RenderGeometry(Core::Vertex *vertices, int ROCKET_UNUSED_PARAMETER(num_vertices),
+        int *indices, int num_indices, const Core::TextureHandle texture, const Core::Vector2f& translation) {
 	ROCKET_UNUSED(num_vertices);
 	
 	glPushMatrix();
@@ -73,15 +72,16 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, 
 }
 
 // Called by Rocket when it wants to compile geometry it believes will be static for the forseeable future.		
-Rocket::Core::CompiledGeometryHandle ShellRenderInterfaceOpenGL::CompileGeometry(Rocket::Core::Vertex* ROCKET_UNUSED_PARAMETER(vertices), int ROCKET_UNUSED_PARAMETER(num_vertices), int* ROCKET_UNUSED_PARAMETER(indices), int ROCKET_UNUSED_PARAMETER(num_indices), const Rocket::Core::TextureHandle ROCKET_UNUSED_PARAMETER(texture))
-{
+Core::CompiledGeometryHandle ShellRenderInterfaceOpenGL::CompileGeometry(Core::Vertex *ROCKET_UNUSED_PARAMETER(vertices),
+        int ROCKET_UNUSED_PARAMETER(num_vertices), int *ROCKET_UNUSED_PARAMETER(indices),
+        int ROCKET_UNUSED_PARAMETER(num_indices), const Core::TextureHandle ROCKET_UNUSED_PARAMETER(texture)) {
 	ROCKET_UNUSED(vertices);
 	ROCKET_UNUSED(num_vertices);
 	ROCKET_UNUSED(indices);
 	ROCKET_UNUSED(num_indices);
 	ROCKET_UNUSED(texture);
 
-	return (Rocket::Core::CompiledGeometryHandle) NULL;
+	return (Core::CompiledGeometryHandle) NULL;
 }
 
 // Called by Rocket when it wants to render application-compiled geometry.		
@@ -169,14 +169,12 @@ bool ShellRenderInterfaceOpenGL::GenerateTexture(Rocket::Core::TextureHandle& te
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	texture_handle = (Rocket::Core::TextureHandle) texture_id;
+	texture_handle = (Core::TextureHandle) texture_id;
 
 	return true;
 }
 
 // Called by Rocket when a loaded texture is no longer required.		
-void ShellRenderInterfaceOpenGL::ReleaseTexture(Rocket::Core::TextureHandle texture_handle)
-{
-	glDeleteTextures(1, (GLuint*) &texture_handle);
-}
+void ShellRenderInterfaceOpenGL::ReleaseTexture(Core::TextureHandle texture_handle) {
+	glDeleteTextures(1, (GLuint*) &texture_handle); }
 

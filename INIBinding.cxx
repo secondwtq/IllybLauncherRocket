@@ -9,10 +9,10 @@
 
 #include "INIBinding.hxx"
 
-#include <luajit-2.0/lua.hpp>
-#include <LuaBridge/LuaBridge.h>
+#include "thirdpt/luajit.hxx"
+#include "thirdpt/luabridge.hxx"
 
-#include "simpleini/simpleini.h"
+#include "thirdpt/simpleini.hxx"
 
 class CSimpleIniAWrap {
 public:

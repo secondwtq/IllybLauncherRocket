@@ -10,10 +10,11 @@
 #include "FacerEvent.hxx"
 #include "FacerEventPortGLFW.hxx"
 
-#include <GLFW/glfw3.h>
+#include "platform.h"
+#include "thirdpt/glfw.hxx"
 
 #include <locale>
-#include <codecvt>
+#include "thirdpt/codecvt.hxx"
 
 namespace Facer {
 namespace Port {
@@ -102,9 +103,11 @@ InputEvent createEventInputText(GLFWwindow *window, int charpoint) {
     ret.setCursorPosition(xpos, ypos);
     ret.modifierState = generateModifierState(window);
 
+#if CUBE_HAS_CODECVT
     std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cv;
     std::string r = cv.to_bytes(charpoint);
     ret.input = r;
+#endif
 
     return ret;
 }

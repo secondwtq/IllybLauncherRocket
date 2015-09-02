@@ -10,10 +10,11 @@
 #include "FacerEvent.hxx"
 #include "FacerEventPortRocket.hxx"
 
+#include "platform.h"
 #include <Rocket/Core.h>
 
 #include <locale>
-#include <codecvt>
+#include "thirdpt/codecvt.hxx"
 
 namespace Facer {
 namespace Port {
@@ -86,6 +87,7 @@ int getMouseButtonIdentifier(InputEvent::MouseButton button) {
 #undef _FACER_DEFKEY_
 }
 
+#if CUBE_HAS_CODECVT
 // stackoverflow.com/questions/11086183/encode-decode-stdstring-to-utf-16
 namespace {
 
@@ -101,6 +103,7 @@ template<typename internT, typename externT, typename stateT>
 using usable_codecvt = usable_faceT<std::codecvt<internT, externT, stateT>>;
 
 }
+#endif
 
 void processEvent(::Rocket::Core::Context *ctx, const InputEvent& event) {
     switch (event.type) {
@@ -127,9 +130,11 @@ void processEvent(::Rocket::Core::Context *ctx, const InputEvent& event) {
             break;
 
         case InputEvent::InputText: {
+#if CUBE_HAS_CODECVT
             std::wstring_convert<usable_codecvt<char16_t, char, std::mbstate_t>, char16_t> cv;
             std::u16string u16 = cv.from_bytes(event.input);
             ctx->ProcessTextInput(::Rocket::Core::String(u16.length() * 2, reinterpret_cast<const char *>(u16.c_str())));
+#endif
         }
             break;
 

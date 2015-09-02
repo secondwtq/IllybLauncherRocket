@@ -10,7 +10,7 @@
 #include "config.hxx"
 
 LauncherConfig::LauncherConfig() :
-    width(800), height(600)
+    width(800), height(600), autoCenter(true), noBorder(true)
 { }
 
 const LauncherConfig& LauncherConfig::instance() {

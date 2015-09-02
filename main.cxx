@@ -1,65 +1,32 @@
 
-#include <stdio.h>
-#include <GLFW/glfw3.h>
+#include "main.hxx"
+
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 #include <Rocket/Debugger.h>
 #include <assert.h>
-#include <luajit-2.0/lua.hpp>
+
+#include "thirdpt/glfw.hxx"
+#include "thirdpt/luajit.hxx"
 
 #include "ShellRenderInterfaceOpenGL.h"
 #include "ShellSystemInterface.h"
 #include "CABALPortRocket.hxx"
-#include "RocketEventInstancer.hxx"
+//#include "RocketEventInstancer.hxx"
 
 #include <Rocket/Core/Lua/Interpreter.h>
 #include <Rocket/Controls/Lua/Controls.h>
 
 #include "INIBinding.hxx"
-#include "FacerEvent.hxx"
-#include "FacerEventPortGLFW.hxx"
-#include "FacerEventPortRocket.hxx"
 
+#include "GLFWFunctions.hxx"
 #include "CABAL.hxx"
 
+#include "platform.h"
 #include "config.hxx"
 
 ShellRenderInterfaceExtensions *shell_renderer_ext = nullptr;
 Rocket::Core::Context *rocket_ctx = nullptr;
-
-void error_callback(int error, const char *desc) {
-    printf("%s\n", desc); }
-
-void glfw_keycb(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    if (action == GLFW_PRESS) {
-        if (key == GLFW_KEY_ESCAPE) {
-            glfwSetWindowShouldClose(window, GL_TRUE);
-            return;
-        }
-    }
-    Facer::InputEvent e = Facer::Port::GLFW::createEventKey(window, key, scancode, action, mods);
-    Facer::Port::Rocket::processEvent(rocket_ctx, e);
-}
-
-void glfw_cursorcb(GLFWwindow *window, double x, double y) {
-    Facer::InputEvent e = Facer::Port::GLFW::createEventMouseMove(window, x, y);
-    Facer::Port::Rocket::processEvent(rocket_ctx, e);
-}
-
-void glfw_mousecb(GLFWwindow *window, int button, int action, int mods) {
-    Facer::InputEvent e = Facer::Port::GLFW::createEventMouseButton(window, button, action, mods);
-    Facer::Port::Rocket::processEvent(rocket_ctx, e);
-}
-
-void glfw_wheelcb(GLFWwindow *window, double xoffset, double yoffset) {
-    Facer::InputEvent e = Facer::Port::GLFW::createEventMouseWheel(window, xoffset, yoffset);
-    Facer::Port::Rocket::processEvent(rocket_ctx, e);
-}
-
-void glfw_charcb(GLFWwindow *window, unsigned int codepoint) {
-    Facer::InputEvent e = Facer::Port::GLFW::createEventInputText(window, codepoint);
-    Facer::Port::Rocket::processEvent(rocket_ctx, e);
-}
 
 void main_loop() {
     rocket_ctx->Update();
@@ -68,9 +35,7 @@ void main_loop() {
     rocket_ctx->Render();
 }
 
-int main(int argc, const char *argv[]) {
-
-    assert(glfwInit());
+int entryPoint(int argc, const char *argv[]) {
 
     assert(CABAL::init(argv[0]));
     CABAL::addSearchPath(".");
@@ -78,17 +43,18 @@ int main(int argc, const char *argv[]) {
     CABAL::addSearchPath("fonts.7z");
     CABAL::addSearchPath("images.7z");
 
-    glfwSetErrorCallback(error_callback);
+    assert(glfwInit());
+    glfwSetErrorCallback(Illyb::GLFW::errorcb);
+    if (LauncherConfig::instance().noBorder) {
+        glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_DECORATED, GL_FALSE);
+    }
     GLFWwindow *window = glfwCreateWindow(LauncherConfig::instance().width,
           LauncherConfig::instance().height, "IllybLauncher", nullptr, nullptr);
-    if (!window) {
-        glfwTerminate(); exit(-1); }
-
-    glfwSetKeyCallback(window, glfw_keycb);
-    glfwSetCursorPosCallback(window, glfw_cursorcb);
-    glfwSetMouseButtonCallback(window, glfw_mousecb);
-    glfwSetScrollCallback(window, glfw_wheelcb);
-    glfwSetCharCallback(window, glfw_charcb);
+    assert(window);
+    if (LauncherConfig::instance().autoCenter) {
+        Illyb::GLFW::centerWindow(window); }
+    Illyb::GLFW::setUpWindowEvents(window);
     glfwMakeContextCurrent(window);
 
     ShellRenderInterfaceOpenGL gl_renderer;
@@ -122,13 +88,16 @@ int main(int argc, const char *argv[]) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+#ifdef CUBE_PLATFORM_OS_X
     glViewport(0, 0, 1600, 1200);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
+#else
+    glViewport(0, 0, LauncherConfig::instance().width,
+            LauncherConfig::instance().height);
+#endif
+    glMatrixMode(GL_PROJECTION); glLoadIdentity();
     glOrtho(0, LauncherConfig::instance().width,
             LauncherConfig::instance().height, 0, -1, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW); glLoadIdentity();
 
     while (!glfwWindowShouldClose(window)) {
         main_loop();
@@ -145,3 +114,47 @@ int main(int argc, const char *argv[]) {
     glfwTerminate();
     return 0;
 }
+
+#ifndef CUBE_PLATFORM_WINDOWS
+
+int main(int argc, const char *argv[]) {
+    return entryPoint(argc, argv); }
+
+#else
+
+#include <vector>
+#include <string>
+
+// stackoverflow.com/questions/27363851/pass-winmain-or-wwinmain-arguments-to-normal-main
+#include <windows.h>
+#include <shellapi.h>
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hpInstance, LPSTR nCmdLine, int iCmdShow) {
+    int w_argc = 0;
+    LPWSTR* w_argv = CommandLineToArgvW(GetCommandLineW(), &w_argc);
+    int ret = -1;
+    if (w_argv) {
+        std::vector<std::string> argv_buf;
+        argv_buf.reserve(w_argc);
+
+        for (int i = 0; i < w_argc; ++i) {
+            int w_len = lstrlenW(w_argv[i]);
+            int len = WideCharToMultiByte(CP_ACP, 0, w_argv[i], w_len, NULL, 0, NULL, NULL);
+            std::string s;
+            s.resize(len);
+            WideCharToMultiByte(CP_ACP, 0, w_argv[i], w_len, &s[0], len, NULL, NULL);
+            argv_buf.push_back(s);
+        }
+
+        std::vector<const char *> argv;
+        argv.reserve(argv_buf.size());
+        for (auto i : argv_buf) {
+            argv.push_back(i.c_str()); }
+
+        ret = entryPoint(argv.size(), &argv[0]);
+        LocalFree(w_argv);
+    }
+    return ret;
+}
+
+#endif
