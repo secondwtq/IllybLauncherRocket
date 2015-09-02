@@ -9,8 +9,8 @@ set(SOURCE_FACER_EVENT FacerEvent.hxx FacerEventKey.hxx FacerEvent.cxx
 set(SOURCE_FILES ${SOURCE_FACER_EVENT} main.cxx ShellRenderInterfaceOpenGL.cpp config.hxx config.cxx
     CABALPortRocket.hxx CABALPortRocket.cxx INIBinding.hxx INIBinding.cxx CABAL.hxx CABAL.cxx
     ShellSystemInterface.cpp ShellSystemInterface.h thirdpt/stb.cxx thirdpt/luajit.hxx thirdpt/glfw.hxx thirdpt/simpleini.hxx
-        thirdpt/luabridge.hxx thirdpt/stb_image.hxx platform.h thirdpt/codecvt.hxx GLFWFunctions.cxx GLFWFunctions.hxx main.hxx)
-add_executable(IllybLauncher ${SOURCE_FILES} RocketEventListener.hxx RocketEventListener.cxx)
+        thirdpt/luabridge.hxx thirdpt/stb_image.hxx platform.h thirdpt/codecvt.hxx GLFWFunctions.cxx GLFWFunctions.hxx main.hxx
+        RocketEventListener.hxx RocketEventListener.cxx)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -72,11 +72,17 @@ if(WIN32)
     list(APPEND HOWARD_LIBS ${EXTRA_LIBS_WIN32})
 
     if(MINGW)
+        # for RC files
+        # www.cmake.org/Bug/view.php?id=4068
+        # already fixed :)
+
         set(MINGW_STATIC FALSE CACHE BOOL "If you are using MinGW32, should the runtime linked staticlly?")
         if (MINGW_STATIC)
             set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Bstatic -static")
         endif(MINGW_STATIC)
     endif(MINGW)
+
+    list(APPEND SOURCE_FILES ver.rc)
 
     set(DISABLE_WIN32_CONSOLE TRUE CACHE BOOL "Eliminate the shell window in Windows.")
     # stackoverflow.com/questions/4441551/how-to-stop-mingw-g-opening-a-console-window-in-windows
@@ -85,6 +91,8 @@ if(WIN32)
         # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -mwindows")
     endif(MINGW AND DISABLE_WIN32_CONSOLE)
 endif(WIN32)
+
+add_executable(IllybLauncher ${SOURCE_FILES})
 
 include_directories(.)
 include_directories(third_party/LuaBridge/Source)

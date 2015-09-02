@@ -1,0 +1,26 @@
+id ICON "assets/Icon_1.ico"
+
+1 VERSIONINFO
+FILEVERSION     0,4,1,8
+PRODUCTVERSION  0,4,1,8
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "Bureau de Planification de WLGC, 2015."
+      VALUE "FileDescription", "EASB Hour Launcher Application"
+      VALUE "FileVersion", "Prototype"
+      VALUE "InternalName", "illyb_launcher_rocket"
+      VALUE "LegalCopyright", "Copyleft 2015 Bureau de Planification de WLGC."
+      VALUE "OriginalFilename", "a.out"
+      VALUE "ProductName", "MarKsCube Super Simple Ultimate Unlimited Universal GameEngine."
+      VALUE "ProductVersion", "Prototype"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END

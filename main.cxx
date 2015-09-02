@@ -39,9 +39,9 @@ int entryPoint(int argc, const char *argv[]) {
 
     assert(CABAL::init(argv[0]));
     CABAL::addSearchPath(".");
-    CABAL::addSearchPath("main.7z");
+    CABAL::addSearchPath("main.zip");
     CABAL::addSearchPath("fonts.7z");
-    CABAL::addSearchPath("images.7z");
+    CABAL::addSearchPath("images.zip");
 
     assert(glfwInit());
     glfwSetErrorCallback(Illyb::GLFW::errorcb);
