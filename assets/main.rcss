@@ -5,7 +5,7 @@ body {
 	font-weight: normal;
 	font-style: normal;
 	font-size: 15;
-	color: black;
+	color: rgb(255, 246, 0);
 	/*font-charset: U+0020-007E, U+4E00-9FFF;*/
 }
 
@@ -16,7 +16,7 @@ body {
 	height: 600px;
 	z-index: -1;
 	background-decorator: image;
-	background-image: background.tga;
+	background-image: bg_gradient.png;
 }
 
 h1 {
@@ -29,35 +29,34 @@ div {
 
 .owner-setting {
 	color: black;
-	line-height: 1em;
+	/*line-height: 1em;*/
 }
 
 input.text {
-	border-color: red;
-	border-width: 1px;
-	background: black;
-	color: white;
+	/*border-color: red;*/
+	/*border-width: 1px;*/
+	/*background: black;*/
+	color: rgb(255, 246, 0);
 	padding-left: 0.5em;
 	font-size: 1em;
-	margin: 0.3em;
-	margin-left: 0.2em;
-	margin-right: 0.2em; 
 	line-height: 0.8em;
-	height: 1.5em;
-	width: 10em;
+	height: 1.2em;
+	width: 7em;
 }
 
 select,
 dataselect {
 	border-color: red;
-	border-width: 1px;
-	color: white;
-	background: black;
+	/*border-width: 1px;*/
+	color: rgb(255, 246, 0);
+	/*background: black;*/
 	font-size: 1em;
-	height: 1.5em;
-	margin: 0.3em;
-	margin-left: 0.2em;
-	margin-right: 0.2em;
+	height: 1.2em;
+	line-height: 1.05em;
+	/*margin: 0.3em;*/
+	margin-left: 0;
+	margin-right: 0;
+	display: inline-block;
 }
 
 select, dataselect,
@@ -67,57 +66,120 @@ select option, dataselect option {
 
 select option,
 dataselect option {
-	background: black;
-	color: white;
-	border-color: red;
+	color: rgb(255, 246, 0);
+	margin: 0;
+	line-height: 1.05em;
+	height: 1.2em;
+}
+
+select selectbox,
+dataselect selectbox {
+	border-color: rgb(117, 38, 38);
+	background: rgb(150, 38, 38);
 	border-width: 1px;
 	font-size: 1em;
-	margin: 0;
-	height: 1.5em;
-	margin-top: -1px;
-	margin-bottom: -1px;
+	margin-right: -0.5em;
 }
 
 select option:hover,
 dataselect option:hover {
-	background: red;
-	border-color: red;
-	color: white;
+	background: rgb(210, 38, 38);
+	/*border-color: red;*/
+	/*color: white;*/
 }
 
 button {
-	font-size: 1em;
-	background: black;
 	color: white;
-	padding-top: 0.5em;
-	padding-bottom: 0.5em;
-	padding-left: 1em;
-	padding-right: 1em;
-	border-color: red;
-	border-width: 1px;
+	padding: 0.1em;
+	padding-left: 0.4em;
+	padding-right: 0.4em;
+	line-height: 26px;
+
+	background-decorator: tiled-box;
+	background-bottom-left-image: button.png 0px 20px 4px 24px;
+	background-bottom-right-image: button.png 20px 20px 24px 24px;
+	background-top-left-image: button.png 0px 0px 4px 4px;
+	background-bottom-image: button.png stretch 4px 20px 20px 24px;
+	background-top-image: button.png stretch 4px 0px 20px 4px;
+	background-top-right-image: button.png 20px 0px 24px 4px;
+	background-left-image: button.png stretch 0px 4px 4px 20px;
+	background-center-image: button.png stretch 4px 4px 20px 20px;
 }
 
 button:active {
-	background: red;
+	background-bottom-left-image: button_pressed.png 0px 20px 4px 24px;
+	background-bottom-right-image: button_pressed.png 20px 20px 24px 24px;
+	background-top-left-image: button_pressed.png 0px 0px 4px 4px;
+	background-bottom-image: button_pressed.png stretch 4px 20px 20px 24px;
+	background-top-image: button_pressed.png stretch 4px 0px 20px 4px;
+	background-top-right-image: button_pressed.png 20px 0px 24px 4px;
+	background-left-image: button_pressed.png stretch 0px 4px 4px 20px;
+	background-center-image: button_pressed.png stretch 4px 4px 20px 20px;
 }
 
-input.checkbox {
+.button-text {
+	color: rgb(255, 246, 0);
+}
+
+input.checkbox.player-checkbox {
 	width: 12px;
 	height: 12px;
 	border-width: 1px;
-	border-color: red;
+	border-color: rgb(150, 38, 38);
 	background: black;
 	position: relative;
-	margin-right: 0.1em;
-	bottom: 6px;
+	/*margin-left: 0.1em;*/
+	bottom: 4px;
 }
 
-input.checkbox:checked {
-	background: red;
+input.checkbox.player-checkbox:checked {
+	background: rgb(210, 38, 38);
 }
 
-input.checkbox:disabled:checked {
+input.checkbox.player-checkbox:disabled:checked {
 	background: rgba(255, 0, 0, 128);
+}
+
+input.checkbox.yr-checkbox {
+	width: 20px;
+	height: 20px;
+	color: white;
+	margin-right: 8px;
+	icon-decorator: image;
+	icon-image: checkbox_unchecked.png;
+}
+
+input.checkbox.yr-checkbox:checked {
+	icon-decorator: image;
+	icon-image: checkbox_checked.png;
+}
+
+.settings-meta-group {
+	margin-top: 12px;
+	margin-bottom: 12px;
+}
+
+.settings-meta-checkbox {
+	width: 144px;
+	display: inline-block;
+}
+
+.settings-meta-slider {
+	width: 260px;
+	display: inline-block;
+}
+
+.checkbox-text {
+	display: inline;
+	line-height: 24px;
+	vertical-align: top;
+}
+
+.slider-text {
+	width: 96px;
+	display: inline-block;
+	line-height: 24px;
+	vertical-align: top;
 }
 
 dataselect:disabled,
@@ -131,47 +193,70 @@ input.text:disabled {
 	padding-left: 0.2em;
 }
 
+/* national flag <img> */
 .img-flag {
-	width: 16px;
-	height: 16px;
-	vertical-align: middle;
+	width: 21px;
+	height: 15px;
+	position: relative;
+	top: 2px;
+	vertical-align: top;
 	margin-right: 3px;
 }
 
 .color-selected-1 {
-	border-width: 1px;
+	/*border-width: 1px;*/
 	border-color: rgb(255, 0, 0);
 	background: rgb(255, 0, 0);
 }
 
 .color-selected-2 {
-	border-width: 1px;
+	/*border-width: 1px;*/
 	border-color: rgb(0, 255, 0);
 	background: rgb(0, 255, 0);
 }
 
 .color-selected-3 {
-	border-width: 1px;
+	/*border-width: 1px;*/
 	border-color: rgb(0, 0, 255);
 	background: rgb(0, 0, 255);
 }
 
 input.range {
-	width: 7em;
-	height: 1.5em;
+	width: 6em;
+	height: 26px;
 }
 
 input.range slidertrack {
-	border-color: red;
+	/*border-color: red;
 	border-width: 1px;
-	background: black;
-	margin-top: -1px;
+	background: black;*/
+	/*margin-top: -1px;*/
+	color: white;
+	padding-left: 1px;
+	padding-right: 1px;
+	background-decorator: tiled-box;
+	background-bottom-left-image: slider_border_text.png 0px 24px 2px 26px;
+	background-bottom-image: slider_border_text.png stretch 2px 24px 50px 26px;
+	background-bottom-right-image: slider_border_text.png 50px 24px 52px 26px;
+
+	background-top-left-image: slider_border_text.png 0px 0px 2px 2px;
+	background-top-image: slider_border_text.png stretch 2px 0px 50px 2px;
+	background-top-right-image: slider_border_text.png 50px 0px 52px 2px;
+
+	background-left-image: slider_border_text.png stretch 0px 2px 2px 24px;
+	background-right-image: slider_border_text.png stretch 50px 2px 52px 24px;
+
+	background-center-image: slider_border_text.png stretch 2px 2px 4px 4px;
 }
 
 input.range sliderbar {
-	background: rgb(255, 0, 0);
-	width: 0.6em;
-	/*margin-top: 1px;*/
+	width: 14px;
+	height: 24px;
+	color: white;
+	margin-top: 1px;
+	
+	background-decorator: image;
+	background-image: slider_bar.png;
 }
 
 input.range sliderarrowinc,
@@ -183,15 +268,103 @@ input.range sliderarrowdec {
 	height: 1.4em;*/
 }
 
-.range-data {
-	background: black;
+.range-data-bg {
+	/*background: black;*/
 	color: white;
 	display: inline-block;
 	position: relative;
-	height: 1.5em;
-	width: 4em;
+	height: 26px;
+	width: 56px;
 	text-align: center;
-	border-color: red;
-	border-width: 1px;
+/*	border-color: red;
+	border-width: 1px;*/
 	margin-left: -1px;
+
+	background-decorator: tiled-box;
+	background-bottom-left-image: slider_border_text.png 0px 24px 2px 26px;
+	background-bottom-image: slider_border_text.png stretch 2px 24px 50px 26px;
+	background-bottom-right-image: slider_border_text.png 50px 24px 52px 26px;
+
+	background-top-left-image: slider_border_text.png 0px 0px 2px 2px;
+	background-top-image: slider_border_text.png stretch 2px 0px 50px 2px;
+	background-top-right-image: slider_border_text.png 50px 0px 52px 2px;
+
+	background-left-image: slider_border_text.png stretch 0px 2px 2px 24px;
+	background-right-image: slider_border_text.png stretch 50px 2px 52px 24px;
+
+	background-center-image: slider_border_text.png stretch 2px 4px 49px 23px;
+}
+
+.range-data {
+	line-height: 30px;
+	color: rgb(255, 246, 0);
+}
+
+#player-1 {
+	display: block;
+	position: relative;
+}
+
+.top-caption-text {
+	font-size: 14px;
+	line-height: 28px;
+	color: rgb(205, 50, 50);
+	padding-left: 6px;
+}
+
+.top-caption-text-border {
+	display: inline-block;
+	height: 24px;
+	width: 48px;
+	/*padding-right: 1px;*/
+	background-decorator: tiled-box;
+	background-bottom-left-image: top_caption_border.png 0px 20px 4px 24px;
+	background-bottom-right-image: top_caption_border.png 574px 20px 582px 24px;
+	background-top-left-image: top_caption_border.png 0px 0px 4px 4px;
+	background-bottom-image: top_caption_border.png stretch 4px 20px 574px 24px;
+	background-top-image: top_caption_border.png stretch 4px 0px 574px 4px;
+	background-top-right-image: top_caption_border.png 578px 0px 582px 4px;
+	background-left-image: top_caption_border.png stretch 0px 4px 4px 20px;
+
+	background-center-image: top_caption_border.png stretch 4px 4px 566px 20px;
+}
+
+.top-caption-border {
+	display: inline-block;
+	color: white;
+	padding: 1px;
+}
+
+.owner-setting-border {
+	/* inline-block sucks ... */
+	display: inline-block;
+	color: white;
+
+	max-width: 383px;
+	padding: 5px;
+	padding-left: 8px;
+	padding-right: 0px;
+
+	background-decorator: tiled-box;
+	background-bottom-left-image: owner_setting_border.png 0px 32px 32px 40px;
+	background-bottom-image: owner_setting_border.png stretch 8px 32px 574px 40px;
+	background-bottom-right-image: owner_setting_border.png 574px 32px 582px 40px;
+	background-top-left-image: owner_setting_border.png 0px 0px 8px 8px;
+	background-top-image: owner_setting_border.png stretch 8px 0px 574px 8px;
+	background-top-right-image: owner_setting_border.png 574px 0px 582px 8px;
+	background-left-image: owner_setting_border.png stretch 0px 8px 8px 24px;
+	background-center-image: owner_setting_border.png stretch 8px 8px 566px 24px;
+}
+
+.left-side {
+	padding-top: 12px;
+	padding-left: 12px;
+}
+
+.settings-player {
+	margin-bottom: 1em;
+}
+
+.settings-meta {
+	padding: 3px;
 }

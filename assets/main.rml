@@ -7,80 +7,123 @@
 </head>
 <body>
 
-	<div class="background-element">hhhhh</div>
+	<div class="background-element"></div>
 
-	<h1>EASB Hour 丧命时刻</h1>
+<!-- 	<h1>EASB Hour 丧命时刻</h1> -->
 
-	<div id="player-1">
-		<div class="owner-setting player">
-			<input class="select-enabled" type="checkbox" checked disabled />
-			<span class="owner-setting-inner">
-				<input class="text" value="Translator-C"></input>
-				<select class="select-side" name="owner-side" style="width: 10em;">
-					<option value="-"><img class="img-flag" src="random.tga" />Random</option>
-					<option value="0" selected><img class="img-flag" src="us.tga" />United States</option>
-					<option value="1"><img class="img-flag" src="china.tga" />China</option>
-					<option value="2"><img class="img-flag" src="russia.tga" />Russia</option>
-				</select>
-				<dataselect class="select-color" name="owner-color" style="width: 4em;" source="srccolor.placeholder" fields="colors" onchange="select_color(event)"></dataselect>
-				<dataselect class="select-place" name="owner-place" style="width: 4em;" source="srclocation.placeholder" fields="places" onchange="select_place(event)"></dataselect>
-				<select class="select-ally" name="owner-ally" style="width: 4em;">
-					<option value="-" selected>-</option>
-					<option value="A">A</option>
-					<option value="B">B</option>
-					<option value="C">C</option>
-					<option value="D">D</option>
-				</select>
-			</span>
+	<div class="left-side">
+		<div class="settings-player">
+			<div class="top-caption-border">
+				<span class="top-caption-text-border" style="width: 124px;">
+					<div class="top-caption-text">Player</div>
+				</span>
+				<span class="top-caption-text-border" style="width: 121px;">
+					<div class="top-caption-text">Side</div>
+				</span>
+				<span class="top-caption-text-border"><span class="top-caption-text">Color</span></span>
+				<span class="top-caption-text-border"><span class="top-caption-text">Loc</span></span>
+				<span class="top-caption-text-border"><span class="top-caption-text">Ally</span></span>
+			</div>
+
+			<div id="player-1">
+				<div class="owner-setting player owner-setting-border">
+					<input class="select-enabled player-checkbox" type="checkbox" checked disabled />
+					<span class="owner-setting-inner">
+						<input class="text" value="Translator-C"></input>
+						<select class="select-side" name="owner-side" style="width: 8em;">
+							<option value="-"><img class="img-flag" src="random_flag.png" />Random</option>
+							<option value="0" selected><img class="img-flag" src="usa.png" />United States</option>
+							<option value="1"><img class="img-flag" src="prc.png" />China</option>
+							<option value="2"><img class="img-flag" src="russia.png" />Russia</option>
+						</select>
+						<dataselect class="select-color" name="owner-color" style="width: 48px;" source="srccolor.placeholder" fields="colors" onchange="select_color(event)"></dataselect>
+						<dataselect class="select-place" name="owner-place" style="width: 48px;" source="srclocation.placeholder" fields="places" onchange="select_place(event)"></dataselect>
+						<select class="select-ally" name="owner-ally" style="width: 47px;">
+							<option value="-" selected>-</option>
+							<option value="A">A</option>
+							<option value="B">B</option>
+							<option value="C">C</option>
+							<option value="D">D</option>
+						</select>
+					</span>
+				</div>
+			</div>
+
+			<div id="player-2">
+				<template src="owner-setting-template"></template>
+			</div>
+			<div id="player-3">
+				<template src="owner-setting-template"></template>
+			</div>
+			<div id="player-4">
+				<template src="owner-setting-template"></template>
+			</div>
+			<div id="player-5">
+				<template src="owner-setting-template"></template>
+			</div>
+			<div id="player-6">
+				<template src="owner-setting-template"></template>
+			</div>
+			<div id="player-7">
+				<template src="owner-setting-template"></template>
+			</div>
+			<div id="player-8">
+				<template src="owner-setting-template"></template>
+			</div>
+		</div>
+
+		<div class="settings-meta">
+			<div class="settings-meta-group">
+				<div class="settings-meta-checkbox">
+					<input type="checkbox" class="yr-checkbox" checked onchange="select_shortgame(event)" value="enabled" />
+					<div class="checkbox-text">Short Game</div>
+				</div>
+				<div class="settings-meta-slider">
+					<span class="slider-text">Game Speed</span>
+					<input class="select-speed" type="range" min="1" max="6" step="1" value="5" onchange="select_speed(event)" />
+					<span class="range-data-bg"><span class="range-data"></span></span>
+				</div>
+			</div>
+			<div class="settings-meta-group">
+				<div class="settings-meta-checkbox">
+					<input type="checkbox" class="yr-checkbox" onchange="select_mcvredeploy(event)" value="enabled" />
+					<div class="checkbox-text">MCV Redeploy</div>
+				</div>
+				<div class="settings-meta-slider">
+					<span class="slider-text">Credits</span>
+					<input class="select-credits" type="range" min="0" max="10000" step="1000" value="10000" onchange="select_credits(event)" />
+					<span class="range-data-bg"><span class="range-data"></span></span>
+				</div>
+			</div>
+			<div class="settings-meta-group">
+				<div class="settings-meta-checkbox">
+					<input type="checkbox" class="yr-checkbox" checked onchange="select_crates(event)" value="enabled" />
+					<div class="checkbox-text">Crates</div>
+				</div>
+				<div class="settings-meta-slider">
+					<span class="slider-text">Unit Count</span>
+					<input class="select-unitcount" type="range" min="1" max="12" step="1" value="12" onchange="select_unitcount(event)" />
+					<span class="range-data-bg"><span class="range-data"></span></span>
+				</div>
+			</div>
+			<div class="settings-meta-group">
+				<div class="settings-meta-checkbox" style="width: 172px;">
+					<input type="checkbox" class="yr-checkbox" checked onchange="select_superweapons(event)" value="enabled" />
+					<div class="checkbox-text">More Superweapons</div>
+				</div>
+			</div>
+			<div class="settings-meta-group">
+				<div class="settings-meta-checkbox">
+					<input type="checkbox" class="yr-checkbox" checked onchange="select_buildoffally(event)" value="enabled" />
+					<div class="checkbox-text">Build Off Ally</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
-	<div id="player-2">
-		<template src="owner-setting-template"></template>
-	</div>
-	<div id="player-3">
-		<template src="owner-setting-template"></template>
-	</div>
-	<div id="player-4">
-		<template src="owner-setting-template"></template>
-	</div>
-	<div id="player-5">
-		<template src="owner-setting-template"></template>
-	</div>
-	<div id="player-6">
-		<template src="owner-setting-template"></template>
-	</div>
-	<div id="player-7">
-		<template src="owner-setting-template"></template>
-	</div>
-	<div id="player-8">
-		<template src="owner-setting-template"></template>
-	</div>
-
-	<span><input type="checkbox" checked onchange="select_shortgame(event)" value="enabled" />Short Game</span>
-	<span><input type="checkbox" onchange="select_mcvredeploy(event)" value="enabled" />MCV Redeploy</span>
-	<span><input type="checkbox" checked onchange="select_crates(event)" value="enabled" />Crates</span>
-	<span><input type="checkbox" checked onchange="select_superweapons(event)" value="enabled" />Superweapons</span>
-	<span><input type="checkbox" checked onchange="select_buildoffally(event)" value="enabled" />Build Off Ally</span>
-	<br />
-	<span>
-		<input class="select-speed" type="range" min="1" max="6" step="1" value="5" onchange="select_speed(event)" />
-		<span class="range-data"></span> Game Speed
-	</span>
-	<span>
-		<input class="select-credits" type="range" min="0" max="10000" step="1000" value="10000" onchange="select_credits(event)" />
-		<span class="range-data"></span> Credits
-	</span>
-	<span>
-		<input class="select-unitcount" type="range" min="1" max="12" step="1" value="12" onchange="select_unitcount(event)" />
-		<span class="range-data"></span> Unit Count
-	</span>
-
 	<div style="text-align: center; padding: 1em;">
-		<button onclick="launch(document);" id="launch-btn">Launch</button>
+		<button onclick="launch(document);" id="launch-btn"><span class="button-text">Launch</span></button>
 	</div>
-
-	<img src="alpha2.tga" />
 
 </body>
 </rml>

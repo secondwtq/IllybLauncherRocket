@@ -2,32 +2,32 @@
 <head>
 </head>
 <body>
-	<div class="owner-setting ai">
-		<input class="select-enabled" type="checkbox" disabled onchange="select_switch(event)" value="enabled" />
+	<div class="owner-setting owner-setting-border ai">
+		<input class="select-enabled player-checkbox" type="checkbox" disabled onchange="select_switch(event)" value="enabled" />
 		<span class="owner-setting-inner">
-			<select class="select-name" name="owner-name" style="width: 10em;" onchange="select_name(event)">
-				<option value="none">None</option>
-				<!-- [HouseHandicaps] in the INI, decreasing with the difficulty increase -->
-				<option value="2" selected>Easy AI</option>
-				<option value="1">Medium AI</option>
-				<option value="0">Hard AI</option>
-			</select>
-			<select class="select-side" name="owner-side" style="width: 10em;" onchange="select_side(event)">
-				<option value="-" selected><img class="img-flag" src="random.tga" />Random</option>
-				<option value="0"><img class="img-flag" src="us.tga" />United States</option>
-				<option value="1"><img class="img-flag" src="china.tga" />China</option>
-				<option value="2"><img class="img-flag" src="russia.tga" />Russia</option>
-			</select>
-			<dataselect class="select-color" name="owner-color" style="width: 4em;" source="srccolor.placeholder" fields="colors" onchange="select_color(event)"></dataselect>
-			<dataselect class="select-place" name="owner-place" style="width: 4em;" source="srclocation.placeholder" fields="places" onchange="select_place(event)"></dataselect>
-			<select class="select-ally" name="owner-ally" style="width: 4em;" onchange="select_ally(event)">
-				<option value="-" selected>-</option>
-				<option value="A">A</option>
-				<option value="B">B</option>
-				<option value="C">C</option>
-				<option value="D">D</option>
-			</select>
-			<div id="setting-content"></div>
+				<select class="select-name" name="owner-name" style="width: 105px;" onchange="select_name(event)">
+					<option value="none">None</option>
+					<!-- [HouseHandicaps] in the INI, decreasing with the difficulty increase -->
+					<option value="2" selected>Easy AI</option>
+					<option value="1">Medium AI</option>
+					<option value="0">Hard AI</option>
+				</select>
+				<select class="select-side" name="owner-side" style="width: 120px;" onchange="select_side(event)">
+					<option value="-" selected><img class="img-flag" src="random_flag.png" />Random</option>
+					<option value="0"><img class="img-flag" src="usa.png" />United States</option>
+					<option value="1"><img class="img-flag" src="prc.png" />China</option>
+					<option value="2"><img class="img-flag" src="russia.png" />Russia</option>
+				</select>
+				<dataselect class="select-color" name="owner-color" style="width: 48px;" source="srccolor.placeholder" fields="colors" onchange="select_color(event)"></dataselect>
+				<dataselect class="select-place" name="owner-place" style="width: 48px;" source="srclocation.placeholder" fields="places" onchange="select_place(event)"></dataselect>
+				<select class="select-ally" name="owner-ally" style="width: 47px;" onchange="select_ally(event)">
+					<option value="-" selected>-</option>
+					<option value="A">A</option>
+					<option value="B">B</option>
+					<option value="C">C</option>
+					<option value="D">D</option>
+				</select>
+			<!-- <div id="setting-content"></div> -->
 		</span>
 	</div>
 </body>
