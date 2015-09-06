@@ -31,7 +31,7 @@ Rocket::Core::Context *rocket_ctx = nullptr;
 void main_loop() {
     rocket_ctx->Update();
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     rocket_ctx->Render();
 }
 
@@ -50,16 +50,18 @@ int entryPoint(int argc, const char *argv[]) {
         glfwWindowHint(GLFW_DECORATED, GL_FALSE);
     }
     GLFWwindow *window = glfwCreateWindow(LauncherConfig::instance().width,
-          LauncherConfig::instance().height, "IllybLauncher", nullptr, nullptr);
+            LauncherConfig::instance().height, "IllybLauncher", nullptr, nullptr);
     assert(window);
     if (LauncherConfig::instance().autoCenter) {
-        Illyb::GLFW::centerWindow(window); }
+        Illyb::GLFW::centerWindow(window);
+    }
     Illyb::GLFW::setUpWindowEvents(window);
     glfwMakeContextCurrent(window);
 
-    ShellRenderInterfaceOpenGL gl_renderer;
+    ShellRenderInterfaceOpenGL gl_renderer(
+            LauncherConfig::instance().width, LauncherConfig::instance().height,
+            LauncherConfig::instance().hiDPI);
     shell_renderer_ext = &gl_renderer;
-//    gl_renderer.SetViewport(800, 600);
     Rocket::Core::SetRenderInterface(&gl_renderer);
     ShellSystemInterface sys_interface;
     Rocket::Core::SetSystemInterface(&sys_interface);
@@ -88,12 +90,13 @@ int entryPoint(int argc, const char *argv[]) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-#ifdef CUBE_PLATFORM_OS_X
-    glViewport(0, 0, 1600, 1200);
-#else
-    glViewport(0, 0, LauncherConfig::instance().width,
-            LauncherConfig::instance().height);
-#endif
+    if (LauncherConfig::instance().hiDPI) {
+        glViewport(0, 0, LauncherConfig::instance().width * 2,
+                LauncherConfig::instance().height * 2);
+    } else {
+        glViewport(0, 0, LauncherConfig::instance().width,
+                LauncherConfig::instance().height);
+    }
     glMatrixMode(GL_PROJECTION); glLoadIdentity();
     glOrtho(0, LauncherConfig::instance().width,
             LauncherConfig::instance().height, 0, -1, 1);

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(IllybLauncher)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O0")
 
 set(SOURCE_FACER_EVENT FacerEvent.hxx FacerEventKey.hxx FacerEvent.cxx
     FacerEventPortGLFW.hxx FacerEventPortGLFW.cxx FacerEventPortRocket.hxx FacerEventPortRocket.cxx)
@@ -48,6 +48,13 @@ if(LIBROCKET_FOUND)
     include_directories(${LIBROCKET_INCLUDE_DIRS})
     list(APPEND HOWARD_LIBS ${LIBROCKET_LIBRARIES})
 endif()
+
+# CLion does not has a conf ui now
+#   and we are testing on OS X
+set(HIDPI_EX TRUE CACHE BOOL "Are you compiling for HiDPI (we have no auto detection yet)?")
+if(HIDPI_EX)
+    add_definitions(-DILLYB_HIDPI)
+endif(HIDPI_EX)
 
 if(APPLE)
 

@@ -6,6 +6,9 @@ body {
 	font-style: normal;
 	font-size: 15;
 	color: rgb(255, 246, 0);
+	width: 800px;
+	height: 600px;
+	position: relative;
 	/*font-charset: U+0020-007E, U+4E00-9FFF;*/
 }
 
@@ -17,6 +20,14 @@ body {
 	z-index: -1;
 	background-decorator: image;
 	background-image: bg_gradient.png;
+}
+
+.content {
+	position: absolute;
+	width: 800px;
+	height: 600px;
+	left: 0;
+	top: 0;
 }
 
 h1 {
@@ -357,6 +368,7 @@ input.range sliderarrowdec {
 }
 
 .left-side {
+	position: fixed;
 	padding-top: 12px;
 	padding-left: 12px;
 }
@@ -368,3 +380,180 @@ input.range sliderarrowdec {
 .settings-meta {
 	padding: 3px;
 }
+
+.right-side {
+	/*position: absolute;*/
+	/*display: inline;*/
+	/*width: 400px;*/
+	/*right: 0;*/
+	/*top: 0;*/
+	padding-top: 12px;
+	padding-right: 12px;
+	width: 360px;
+	float: right;
+	text-align: right;
+}
+
+.minimap-container {
+	display: inline-block;
+	width: 324px;
+	height: 244px;
+	margin-top: 12px;
+	margin-right: 16px;
+}
+
+.minimap-img {
+	position: absolute;
+	margin: 2px;
+	width: 320px;
+	height: 240px;
+	text-align: center;
+	line-height: 240px;
+}
+
+/* dirty hack for vertical align */
+.minimap-img span {
+	display: inline-block;
+	width: 0px;
+	font-size: 0;
+}
+
+.minimap-img img {
+	display: inline-block;
+	vertical-align: middle;
+	/* width: 320px; */
+}
+
+.minimap-bg {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-decorator: tiled-box;
+	background-bottom-left-image: minimapbg.png 0px 256px 64px 320px;
+	background-bottom-image: minimapbg.png stretch 64px 256px 256px 320px;
+	background-bottom-right-image: minimapbg.png 256px 256px 320px 320px;
+	background-top-left-image: minimapbg.png 0px 0px 64px 64px;
+	background-top-image: minimapbg.png stretch 64px 0px 256px 64px;
+	background-top-right-image: minimapbg.png 256px 0px 320px 64px;
+	background-left-image: minimapbg.png stretch 0px 64px 64px 256px;
+	background-center-image: minimapbg.png stretch 64px 64px 256px 256px;
+}
+
+.map-selector {
+	margin-right: 16px;
+	margin-top: 12px;
+}
+
+.map-selection-border {
+	/*display: block;*/
+	display: inline-block;
+	background-decorator: tiled-box;
+	background-bottom-left-image: map_selection_border.png 0px 32px 32px 40px;
+	background-bottom-image: map_selection_border.png stretch 8px 32px 574px 40px;
+	background-bottom-right-image: map_selection_border.png 574px 32px 582px 40px;
+	background-top-left-image: map_selection_border.png 0px 0px 8px 8px;
+	background-top-image: map_selection_border.png stretch 8px 0px 574px 8px;
+	background-top-right-image: map_selection_border.png 574px 0px 582px 8px;
+	background-left-image: map_selection_border.png stretch 0px 8px 8px 24px;
+	background-center-image: map_selection_border.png stretch 8px 8px 566px 24px;
+}
+
+.map-selection-caption-text {
+	height: 32px;
+	width: 48px;
+}
+
+.map-selection-list {
+	height: 264px;
+}
+
+.map-selection-left {
+	width: 224px;
+	text-align: left;
+	/*position: relative;*/
+}
+
+.map-selection-right {
+	width: 100px;
+}
+
+.map-selection-container {
+	height: 256px;
+	margin-top: 4px;
+	margin-bottom: 4px;
+	margin-right: 3px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+/* inline-block + overflow: scroll; -> no auto fit */
+.map-item {
+	width: 192px;
+	height: 24px;
+	padding-left: 8px;
+
+/*	border-color: green;
+	border-width: 1px;*/
+}
+
+.map-item:hover {
+	border-color: red;
+}
+
+scrollbarvertical {
+	width: 27px;
+}
+
+scrollbarvertical slidertrack {
+	background-decorator: tiled-vertical;
+	background-top-image: invader.tga 70px 199px 97px 201px;
+	background-center-image: invader.tga stretch 70px 201px 97px 202px;
+	background-bottom-image: invader.tga 70px 203px 97px 204px;
+}
+
+scrollbarvertical sliderbar {
+	margin-left: 4px;
+	width: 23px;
+	min-height: 46px;
+
+	background-decorator: tiled-vertical;
+	background-top-image: invader.tga 56px 152px 79px 175px;
+	background-center-image: invader.tga stretch 56px 175px 79px 175px;
+	background-bottom-image: invader.tga 56px 176px 79px 198px;
+}
+
+scrollbarvertical sliderbar:hover {
+	background-top-image-s: 80px 103px;
+	background-center-image-s: 80px 103px;
+	background-bottom-image-s: 80px 103px;
+}
+
+scrollbarvertical sliderbar:active {
+	background-top-image-s: 104px 127px;
+	background-center-image-s: 104px 127px;
+	background-bottom-image-s: 104px 127px;
+}
+
+scrollbarvertical sliderarrowdec {
+	width: 27px;
+	height: 24px;
+	
+	icon-decorator: image;
+	icon-image: invader.tga 0px 152px 27px 176px;
+}
+
+scrollbarvertical sliderarrowdec:hover,
+scrollbarvertical sliderarrowinc:hover {
+	icon-image-t: 177px 201px; }
+
+scrollbarvertical sliderarrowdec:active,
+scrollbarvertical sliderarrowinc:active {
+	icon-image-t: 202px 226px; }
+
+scrollbarvertical sliderarrowinc {
+	width: 27px;
+	height: 24px;
+	
+	icon-decorator: image;
+	icon-image: invader.tga 28px 152px 55px 176px; }

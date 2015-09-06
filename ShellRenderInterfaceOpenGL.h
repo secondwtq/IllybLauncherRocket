@@ -46,10 +46,11 @@ struct __X11NativeWindowData
 };
 #endif
 
-class ShellRenderInterfaceOpenGL : public Rocket::Core::RenderInterface,  public ShellRenderInterfaceExtensions
-{
+class ShellRenderInterfaceOpenGL :
+		public Rocket::Core::RenderInterface,
+		public ShellRenderInterfaceExtensions {
 public:
-	ShellRenderInterfaceOpenGL();
+	ShellRenderInterfaceOpenGL(size_t width, size_t height, bool hiDPI);
 
 	/// Called by Rocket when it wants to render geometry that it does not wish to optimise.
 	virtual void RenderGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation);
@@ -84,23 +85,9 @@ public:
 //	virtual void PresentRenderBuffer(void);
 
 protected:
-	int m_width;
-	int m_height;
-	void *m_rocket_context;
-	
-#if defined(ROCKET_PLATFORM_MACOSX)
-	AGLContext gl_context;
-#elif defined(ROCKET_PLATFORM_LINUX)
-	struct __X11NativeWindowData nwData;
-	GLXContext gl_context;
-#elif defined(ROCKET_PLATFORM_WIN32)
-	HWND window_handle;
-	HDC device_context;
-	HGLRC render_context;
-#else
-#error Platform is undefined, this must be resolved so gl_context is usable.
-#endif
-
+	size_t m_width;
+	size_t m_height;
+	bool m_hiDPI;
 };
 
 #endif

@@ -10,6 +10,7 @@
 	<div class="background-element"></div>
 
 <!-- 	<h1>EASB Hour 丧命时刻</h1> -->
+	<div class="content">
 
 	<div class="left-side">
 		<div class="settings-player">
@@ -119,6 +120,46 @@
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<div class="right-side">
+		<div class="minimap-container">
+			<div class="minimap-img">
+				<span></span>
+				<img src="minimap_test.png"></img>
+			</div>
+			<div class="minimap-bg"></div>
+		</div>
+		<div class="map-selector">
+			<div class="map-selection-caption">
+				<span class="map-selection-caption-text map-selection-border map-selection-left">
+				</span>
+				<span class="map-selection-caption-text map-selection-border map-selection-right">
+				</span>
+			</div>
+			<div>
+				<span class="map-selection-border map-selection-left map-selection-list">
+					<div class="map-selection-container" style="z-index: 2;">
+						<div class="map-item">AAAA</div>
+						<div class="map-item">BBBB</div>
+						<div class="map-item">CCCC</div>
+						<div class="map-item">DDDD</div>
+						<div class="map-item">EEEE</div>
+						<div class="map-item">FFFF</div>
+						<div class="map-item">GGGG</div>
+						<div class="map-item">HHHH</div>
+						<div class="map-item">IIII</div>
+						<div class="map-item">JJJJ</div>
+						<div class="map-item">KKKK</div>
+						<div class="map-item">LLLL</div>
+					</div>
+				</span>
+				<span class="map-selection-list map-selection-border map-selection-right" style="z-index: 2;">
+				</span>
+			</div>
+		</div>
+	</div>
+
 	</div>
 
 	<div style="text-align: center; padding: 1em;">

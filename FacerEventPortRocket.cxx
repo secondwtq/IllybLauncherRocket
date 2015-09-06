@@ -119,7 +119,8 @@ void processEvent(::Rocket::Core::Context *ctx, const InputEvent& event) {
             break;
 
         case InputEvent::MouseWheel:
-            ctx->ProcessMouseWheel(10, generateModifierState(event));
+            // why negative ...
+            ctx->ProcessMouseWheel(-event.wheelDelta[1], generateModifierState(event));
             break;
 
         case InputEvent::KeyPress:

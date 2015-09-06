@@ -13,6 +13,7 @@
 struct LauncherConfig {
     unsigned short width, height;
     bool autoCenter, noBorder;
+    bool hiDPI;
 
     LauncherConfig();
     static const LauncherConfig& instance();

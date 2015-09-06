@@ -35,11 +35,9 @@
 
 using namespace Rocket;
 
-ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL() {
-	m_rocket_context = NULL;
-	m_width = 0;
-	m_height = 0;
-}
+ShellRenderInterfaceOpenGL::ShellRenderInterfaceOpenGL(
+        size_t width, size_t height, bool hiDPI)
+    : m_width(width), m_height(height), m_hiDPI(hiDPI) { }
 
 // Called by Rocket when it wants to render geometry that it does not wish to optimise.
 void ShellRenderInterfaceOpenGL::RenderGeometry(Core::Vertex *vertices, int ROCKET_UNUSED_PARAMETER(num_vertices),
@@ -53,13 +51,10 @@ void ShellRenderInterfaceOpenGL::RenderGeometry(Core::Vertex *vertices, int ROCK
 	glEnableClientState(GL_COLOR_ARRAY);
 	glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Rocket::Core::Vertex), &vertices[0].colour);
 
-	if (!texture)
-	{
+	if (!texture) {
 		glDisable(GL_TEXTURE_2D);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	}
-	else
-	{
+	} else {
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, (GLuint) texture);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -92,14 +87,12 @@ void ShellRenderInterfaceOpenGL::RenderCompiledGeometry(Rocket::Core::CompiledGe
 }
 
 // Called by Rocket when it wants to release application-compiled geometry.		
-void ShellRenderInterfaceOpenGL::ReleaseCompiledGeometry(Rocket::Core::CompiledGeometryHandle ROCKET_UNUSED_PARAMETER(geometry))
-{
-	ROCKET_UNUSED(geometry);
-}
+void ShellRenderInterfaceOpenGL::ReleaseCompiledGeometry(Core::CompiledGeometryHandle
+    ROCKET_UNUSED_PARAMETER(geometry)) {
+	ROCKET_UNUSED(geometry); }
 
 // Called by Rocket when it wants to enable or disable scissoring to clip content.		
-void ShellRenderInterfaceOpenGL::EnableScissorRegion(bool enable)
-{
+void ShellRenderInterfaceOpenGL::EnableScissorRegion(bool enable) {
 	if (enable)
 		glEnable(GL_SCISSOR_TEST);
 	else
@@ -107,9 +100,10 @@ void ShellRenderInterfaceOpenGL::EnableScissorRegion(bool enable)
 }
 
 // Called by Rocket when it wants to change the scissor region.		
-void ShellRenderInterfaceOpenGL::SetScissorRegion(int x, int y, int width, int height)
-{
-	glScissor(x, m_height - (y + height), width, height);
+void ShellRenderInterfaceOpenGL::SetScissorRegion(int x, int y, int width, int height) {
+    if (m_hiDPI) {
+        glScissor(x * 2, m_height * 2 - (y * 2 + height * 2), width * 2, height * 2);
+    } else { glScissor(x, m_height - (y + height), width, height); }
 }
 
 // Called by Rocket when a texture is required by the library.		
@@ -132,11 +126,9 @@ bool ShellRenderInterfaceOpenGL::LoadTexture(Core::TextureHandle& texture_handle
     unsigned char *decoded = stbi_load_from_memory(buffer, len,
             &width, &height, &channels, STBI_rgb_alpha);
 
-//    unsigned char* image_dest = nullptr;
     bool success = true;
     if (decoded) {
         texture_dimensions = { width, height };
-//        image_dest = new unsigned char[width * height];
          success &= GenerateTexture(texture_handle, decoded, texture_dimensions);
         stbi_image_free(decoded);
     } else {
@@ -144,7 +136,6 @@ bool ShellRenderInterfaceOpenGL::LoadTexture(Core::TextureHandle& texture_handle
         printf("Failed to load Image: %s\n", stbi_failure_reason());
     }
 
-//	delete [] image_dest;
 	delete [] buffer;
 
 	return success;

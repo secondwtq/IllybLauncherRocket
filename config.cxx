@@ -10,7 +10,12 @@
 #include "config.hxx"
 
 LauncherConfig::LauncherConfig() :
-    width(800), height(600), autoCenter(true), noBorder(true)
+    width(800), height(600), autoCenter(true), noBorder(true),
+#ifdef ILLYB_HIDPI
+    hiDPI(true)
+#else
+    hiDPI(false)
+#endif
 { }
 
 const LauncherConfig& LauncherConfig::instance() {
