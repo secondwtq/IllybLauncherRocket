@@ -133,8 +133,10 @@
 		<div class="map-selector">
 			<div class="map-selection-caption">
 				<span class="map-selection-caption-text map-selection-border map-selection-left">
+					<div class="selection-caption-text">Map</div>
 				</span>
 				<span class="map-selection-caption-text map-selection-border map-selection-right">
+					<div class="selection-caption-text">Game Mode</div>
 				</span>
 			</div>
 			<div>

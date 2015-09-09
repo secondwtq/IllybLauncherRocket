@@ -464,18 +464,26 @@ input.range sliderarrowdec {
 	width: 48px;
 }
 
+.selection-caption-text {
+	/*font-size: 14px;*/
+	line-height: 36px;
+	color: rgb(255, 246, 0);
+	padding-left: 6px;
+}
+
 .map-selection-list {
 	height: 264px;
 }
 
 .map-selection-left {
-	width: 224px;
+	width: 192px;
 	text-align: left;
 	/*position: relative;*/
 }
 
 .map-selection-right {
-	width: 100px;
+	width: 132px;
+	text-align: left;
 }
 
 .map-selection-container {
@@ -556,4 +564,5 @@ scrollbarvertical sliderarrowinc {
 	height: 24px;
 	
 	icon-decorator: image;
-	icon-image: invader.tga 28px 152px 55px 176px; }
+	icon-image: invader.tga 28px 152px 55px 176px;
+}

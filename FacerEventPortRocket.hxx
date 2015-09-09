@@ -12,7 +12,7 @@
 
 namespace Rocket {
 namespace Core {
-class Context;
+struct Context;
 }
 }
 
